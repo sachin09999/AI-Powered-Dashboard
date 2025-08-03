@@ -11,7 +11,6 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import Image from 'next/image';
 
 const keyMetrics = [
   { title: 'Total Revenue', value: '$45,231.89', change: '+20.1%', changeType: 'increase', icon: DollarSign },
@@ -29,7 +28,7 @@ const ageDistributionData = [
   { age: '65+', users: 4800 },
 ];
 
-const chartConfig = {
+const ageChartConfig = {
     users: {
       label: "Users",
       color: "hsl(var(--chart-1))",
@@ -42,6 +41,36 @@ const geoDistributionData = [
     { country: 'Brazil', users: 1200, change: '+25.8%', flag: '🇧🇷', fill: 'hsl(var(--chart-3))' },
     { country: 'India', users: 950, change: '+12.1%', flag: '🇮🇳', fill: 'hsl(var(--chart-4))' },
     { country: 'Japan', users: 750, change: '+8.3%', flag: '🇯🇵', fill: 'hsl(var(--chart-5))' },
+];
+
+const salesData = [
+    { month: 'Jan', sales: 4000 },
+    { month: 'Feb', sales: 3000 },
+    { month: 'Mar', sales: 5000 },
+    { month: 'Apr', sales: 4500 },
+    { month: 'May', sales: 6000 },
+    { month: 'Jun', sales: 5500 },
+    { month: 'Jul', sales: 7000 },
+    { month: 'Aug', sales: 6500 },
+    { month: 'Sep', sales: 7500 },
+    { month: 'Oct', sales: 8000 },
+    { month: 'Nov', sales: 9000 },
+    { month: 'Dec', sales: 8500 },
+];
+
+const salesChartConfig = {
+    sales: {
+      label: "Sales",
+      color: "hsl(var(--chart-2))",
+    },
+};
+
+const recentTransactionsData = [
+    { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+$1,999.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
+    { name: 'Jackson Lee', email: 'jackson.lee@email.com', amount: '+$39.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
+    { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com', amount: '+$299.00', status: 'Pending', avatar: 'https://placehold.co/40x40' },
+    { name: 'William Kim', email: 'will@email.com', amount: '+$99.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
+    { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+$39.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
 ];
 
 const performanceData = [
@@ -81,7 +110,7 @@ export default function Home() {
                     <CardDescription>A look at the age demographics of your user base.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={chartConfig} className="h-[300px] w-full">
+                    <ChartContainer config={ageChartConfig} className="h-[300px] w-full">
                         <BarChart
                             accessibilityLayer
                             data={ageDistributionData}
@@ -133,6 +162,69 @@ export default function Home() {
                 </CardContent>
             </Card>
         </div>
+
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Sales Over Time</CardTitle>
+                    <CardDescription>A line chart showing sales performance over the last year.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer config={salesChartConfig} className="h-[300px] w-full">
+                         <LineChart
+                            accessibilityLayer
+                            data={salesData}
+                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis dataKey="month" tickLine={false} axisLine={false} />
+                            <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `$${Number(value) / 1000}k`} />
+                            <ChartTooltip
+                                cursor={true}
+                                content={<ChartTooltipContent indicator="dot" />}
+                            />
+                            <Line type="monotone" dataKey="sales" stroke="var(--color-sales)" strokeWidth={2} dot={false} />
+                        </LineChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Recent Transactions</CardTitle>
+                    <CardDescription>A list of the most recent transactions.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Customer</TableHead>
+                                <TableHead className="text-right">Amount</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {recentTransactionsData.map((transaction, index) => (
+                                <TableRow key={index}>
+                                    <TableCell>
+                                        <div className="flex items-center gap-3">
+                                            <Avatar className="h-9 w-9">
+                                                <AvatarImage src={transaction.avatar} alt="Avatar" data-ai-hint="person" />
+                                                <AvatarFallback>{transaction.name.charAt(0)}</AvatarFallback>
+                                            </Avatar>
+                                            <div>
+                                                <p className="font-medium">{transaction.name}</p>
+                                                <p className="text-sm text-muted-foreground">{transaction.email}</p>
+                                            </div>
+                                        </div>
+                                    </TableCell>
+                                    <TableCell className="text-right font-medium">{transaction.amount}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+        </div>
+
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <div>
