@@ -4,7 +4,7 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Users, DollarSign, Activity, TrendingUp, MoreHorizontal, ArrowUpRight, ArrowDownRight, ChevronDown } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React from 'react';
 import { Button } from '@/components/ui/button';
@@ -37,11 +37,11 @@ const chartConfig = {
 };
 
 const geoDistributionData = [
-    { country: 'United States', users: '2,500', change: '+15.2%', flag: '🇺🇸' },
-    { country: 'Great Britain', users: '1,800', change: '-5.1%', flag: '🇬🇧' },
-    { country: 'Brazil', users: '1,200', change: '+25.8%', flag: '🇧🇷' },
-    { country: 'India', users: '950', change: '+12.1%', flag: '🇮🇳' },
-    { country: 'Japan', users: '750', change: '+8.3%', flag: '🇯🇵' },
+    { country: 'United States', users: 2500, change: '+15.2%', flag: '🇺🇸', fill: 'hsl(var(--chart-1))' },
+    { country: 'Great Britain', users: 1800, change: '-5.1%', flag: '🇬🇧', fill: 'hsl(var(--chart-2))' },
+    { country: 'Brazil', users: 1200, change: '+25.8%', flag: '🇧🇷', fill: 'hsl(var(--chart-3))' },
+    { country: 'India', users: 950, change: '+12.1%', flag: '🇮🇳', fill: 'hsl(var(--chart-4))' },
+    { country: 'Japan', users: 750, change: '+8.3%', flag: '🇯🇵', fill: 'hsl(var(--chart-5))' },
 ];
 
 const performanceData = [
@@ -105,22 +105,24 @@ export default function Home() {
                     <CardDescription>Users by country.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                     <div className="h-[150px] bg-muted rounded-lg flex items-center justify-center overflow-hidden">
-                        <Image 
-                            src="https://placehold.co/600x400"
-                            alt="World map"
-                            width={600}
-                            height={400}
-                            className="object-cover w-full h-full"
-                            data-ai-hint="world map"
-                        />
+                    <div className="h-[200px] flex items-center justify-center">
+                        <ChartContainer config={{}} className="h-full w-full">
+                            <RechartsPieChart>
+                                <Tooltip content={<ChartTooltipContent nameKey="country" hideLabel />} />
+                                <Pie data={geoDistributionData} dataKey="users" nameKey="country" cx="50%" cy="50%" outerRadius={80}>
+                                    {geoDistributionData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={entry.fill} />
+                                    ))}
+                                </Pie>
+                            </RechartsPieChart>
+                        </ChartContainer>
                     </div>
                     <ul className="space-y-2">
                         {geoDistributionData.map(geo => (
                             <li key={geo.country} className="flex items-center gap-2 text-sm">
-                               <span className="text-lg">{geo.flag}</span>
+                               <div className="h-2 w-2 rounded-full" style={{ backgroundColor: geo.fill }} />
                                <span className="font-medium flex-1">{geo.country}</span>
-                               <span className="text-muted-foreground">{geo.users}</span>
+                               <span className="text-muted-foreground">{geo.users.toLocaleString()}</span>
                                <span className={`flex items-center gap-1 font-medium ${geo.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
                                     {geo.change.startsWith('+') ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
                                     {geo.change.substring(1)}
