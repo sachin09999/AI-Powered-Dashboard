@@ -82,7 +82,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                     <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                        <BarChart
+                        <LineChart
                             accessibilityLayer
                             data={ageDistributionData}
                             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -94,8 +94,8 @@ export default function Home() {
                                 cursor={true}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Bar dataKey="users" fill="var(--color-users)" radius={[4, 4, 0, 0]} />
-                        </BarChart>
+                            <Line dataKey="users" type="monotone" stroke="var(--color-users)" strokeWidth={2} dot={true} />
+                        </LineChart>
                     </ChartContainer>
                 </CardContent>
             </Card>
