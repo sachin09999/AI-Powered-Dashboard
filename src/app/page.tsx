@@ -4,7 +4,7 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Users, DollarSign, Activity, TrendingUp, MoreHorizontal, ArrowUpRight, ArrowDownRight, ChevronDown } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
+import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React from 'react';
 import { Button } from '@/components/ui/button';
@@ -82,7 +82,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                     <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                        <LineChart
+                        <BarChart
                             accessibilityLayer
                             data={ageDistributionData}
                             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -94,8 +94,8 @@ export default function Home() {
                                 cursor={true}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={2} dot={{r: 4, fill: 'var(--color-users)'}} activeDot={{r: 6}}/>
-                        </LineChart>
+                            <Bar dataKey="users" fill="var(--color-users)" radius={[4, 4, 0, 0]} />
+                        </BarChart>
                     </ChartContainer>
                 </CardContent>
             </Card>
