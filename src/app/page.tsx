@@ -1,3 +1,5 @@
+'use client';
+
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Users, DollarSign, Activity, TrendingUp } from 'lucide-react';
