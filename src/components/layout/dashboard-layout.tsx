@@ -2,19 +2,37 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart, Home, UploadCloud, Moon, Sun, Bell, User, LogOut, Settings } from 'lucide-react';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarTrigger } from '@/components/ui/sidebar';
+import { BarChart, Home, UploadCloud, Moon, Sun, Bell, User, LogOut, Settings, Search, ChevronDown, LifeBuoy, Rocket } from 'lucide-react';
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarTrigger, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarSeparator } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/theme-provider';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import React from 'react';
 
-const navItems = [
-  { href: '/', label: 'Dashboard', icon: Home },
-  { href: '/data', label: 'Data', icon: UploadCloud },
-  { href: '/charts', label: 'Charts', icon: BarChart },
+const navGroups = [
+    {
+        title: 'Analysis',
+        items: [
+            { href: '/', label: 'Dashboard', icon: Home },
+            { href: '/data', label: 'Data', icon: UploadCloud },
+        ]
+    },
+    {
+        title: 'Insights',
+        items: [
+            { href: '/charts', label: 'Charts', icon: BarChart },
+        ]
+    },
+    {
+        title: 'Settings',
+        items: [
+            { href: '/profile', label: 'Profile', icon: User },
+            { href: '/settings', label: 'Settings', icon: Settings },
+        ]
+    }
 ];
 
 function ThemeToggle() {
@@ -71,44 +89,83 @@ function UserNav() {
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
+  const getPageTitle = () => {
+    for (const group of navGroups) {
+        const item = group.items.find(item => item.href === pathname);
+        if (item) return item.label;
+    }
+    return 'Dashboard';
+  }
+
   return (
     <SidebarProvider>
       <Sidebar variant="sidebar" collapsible="icon">
         <SidebarHeader className="p-4">
-          <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M12 3v6l4 4"/><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18Z"/><path d="M18 18c-2.5-2.5-7.5-2.5-10 0"/></svg>
-            <span className="group-data-[collapsible=icon]:hidden">InsightFlow</span>
-          </Link>
+           <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="w-full justify-between">
+                         <div className="flex items-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-6 w-6 text-primary"><path d="M12 3v6l4 4"/><path d="M12 21a9 9 0 1 1 0-18 9 9 0 0 1 0 18Z"/><path d="M18 18c-2.5-2.5-7.5-2.5-10 0"/></svg>
+                            <span className="group-data-[collapsible=icon]:hidden font-bold">InsightFlow</span>
+                         </div>
+                         <ChevronDown className="h-4 w-4 group-data-[collapsible=icon]:hidden" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-52">
+                    <DropdownMenuLabel>Version</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem>v1.0.0 (Current)</DropdownMenuItem>
+                    <DropdownMenuItem>v0.9.0</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
         </SidebarHeader>
         <SidebarContent className="p-2">
-          <SidebarMenu>
-            {navItems.map((item) => (
-              <SidebarMenuItem key={item.label}>
-                <Link href={item.href} passHref>
-                  <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.label}>
-                    <span>
-                      <item.icon className="h-5 w-5" />
-                      <span>{item.label}</span>
-                    </span>
-                  </SidebarMenuButton>
-                </Link>
-              </SidebarMenuItem>
+            {navGroups.map((group) => (
+                <SidebarGroup key={group.title}>
+                    <SidebarGroupLabel>{group.title}</SidebarGroupLabel>
+                    <SidebarMenu>
+                        {group.items.map((item) => (
+                        <SidebarMenuItem key={item.label}>
+                            <Link href={item.href}>
+                                <SidebarMenuButton asChild isActive={pathname === item.href} tooltip={item.label}>
+                                    <span>
+                                        <item.icon className="h-5 w-5" />
+                                        <span>{item.label}</span>
+                                    </span>
+                                </SidebarMenuButton>
+                            </Link>
+                        </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarGroup>
             ))}
-          </SidebarMenu>
         </SidebarContent>
+        <SidebarFooter className="p-4 mt-auto">
+             <div className="flex flex-col gap-2 group-data-[collapsible=icon]:hidden">
+                <SidebarSeparator />
+                <Button variant="ghost" className="justify-start gap-2">
+                    <LifeBuoy className="h-5 w-5" />
+                    <span>Support</span>
+                </Button>
+                <div className="p-4 rounded-lg bg-primary/10 text-center">
+                    <Rocket className="mx-auto h-8 w-8 text-primary mb-2" />
+                    <p className="font-bold mb-1">Upgrade your Plan</p>
+                    <p className="text-xs text-muted-foreground mb-4">Unlock all features and get unlimited access.</p>
+                    <Button size="sm" className="w-full">Upgrade</Button>
+                </div>
+            </div>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset className="flex flex-col">
-        <header className="flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6">
+        <header className="flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6 sticky top-0 z-10">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="md:hidden" />
-            <h1 className="text-lg font-semibold md:text-xl">
-              {navItems.find(item => item.href === pathname)?.label || 
-               (pathname === '/profile' && 'Profile') ||
-               (pathname === '/settings' && 'Settings') ||
-               'Dashboard'}
-            </h1>
+            <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input type="search" placeholder="Search..." className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px] bg-card" />
+            </div>
           </div>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="relative">
@@ -161,7 +218,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <UserNav />
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
           {children}
         </main>
       </SidebarInset>

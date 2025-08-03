@@ -36,7 +36,7 @@ const lineChartConfig = {
 };
 
 const barChartConfig = {
-  value: { label: "Users", color: "hsl(var(--primary))" },
+  value: { label: "Users", color: "hsl(var(--chart-1))" },
 };
 
 export default function ChartsPage() {
@@ -58,6 +58,11 @@ export default function ChartsPage() {
                 <CartesianGrid vertical={false} />
                 <XAxis
                   dataKey="month"
+                  tickLine={false}
+                  axisLine={false}
+                  tickMargin={8}
+                />
+                 <YAxis
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
@@ -105,7 +110,7 @@ export default function ChartsPage() {
                             />
                             <XAxis type="number" hide />
                             <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-                            <Bar dataKey="value" fill="var(--color-value)" radius={4} layout="vertical" />
+                            <Bar dataKey="value" fill="var(--color-value)" radius={[0, 4, 4, 0]} layout="vertical" />
                         </BarChart>
                     </ChartContainer>
                 </CardContent>
@@ -114,7 +119,7 @@ export default function ChartsPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Device Usage</CardTitle>
-                    <CardDescription>User distribution by device type (donut chart).</CardDescription>
+                    <CardDescription>User distribution by device type.</CardDescription>
                 </CardHeader>
                 <CardContent className="flex justify-center">
                     <ChartContainer config={{}} className="h-[300px] w-full">

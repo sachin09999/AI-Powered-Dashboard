@@ -2,53 +2,59 @@
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Users, DollarSign, Activity, TrendingUp } from 'lucide-react';
+import { Users, DollarSign, Activity, TrendingUp, MoreHorizontal, ArrowUpRight, ArrowDownRight, ChevronDown } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { BarChart as RechartsBarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer, Legend } from 'recharts';
+import { LineChart, Line, CartesianGrid, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import React from 'react';
+import { Button } from '@/components/ui/button';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 
 const keyMetrics = [
-  { title: 'Total Revenue', value: '$45,231.89', change: '+20.1% from last month', icon: DollarSign },
-  { title: 'Total Users', value: '2,350', change: '+180.1% from last month', icon: Users },
-  { title: 'Active Sessions', value: '+573', change: '+201 since last hour', icon: Activity },
-  { title: 'Conversion Rate', value: '12.5%', change: '-2.5% from last month', icon: TrendingUp },
+  { title: 'Total Revenue', value: '$45,231.89', change: '+20.1%', changeType: 'increase', icon: DollarSign },
+  { title: 'Subscriptions', value: '+2350', change: '+180.1%', changeType: 'increase', icon: Users },
+  { title: 'Sales', value: '+12,234', change: '+19%', changeType: 'increase', icon: Activity },
+  { title: 'Active Now', value: '+573', change: '+201', changeType: 'increase', icon: TrendingUp },
 ];
 
-const overviewData = [
-  { name: 'Jan', total: 2380 },
-  { name: 'Feb', total: 2940 },
-  { name: 'Mar', total: 1980 },
-  { name: 'Apr', total: 3210 },
-  { name: 'May', total: 2540 },
-  { name: 'Jun', total: 4320 },
-  { name: 'Jul', total: 4890 },
-  { name: 'Aug', total: 3450 },
-  { name: 'Sep', total: 4100 },
-  { name: 'Oct', total: 3900 },
-  { name: 'Nov', total: 4500 },
-  { name: 'Dec', total: 5100 },
+const ageDistributionData = [
+  { age: '18-24', users: 3800 },
+  { age: '25-34', users: 5200 },
+  { age: '35-44', users: 4500 },
+  { age: '45-54', users: 6100 },
+  { age: '55-64', users: 5400 },
+  { age: '65+', users: 4800 },
 ];
 
 const chartConfig = {
-    total: {
-      label: "Revenue",
-      color: "hsl(var(--primary))",
+    users: {
+      label: "Users",
+      color: "hsl(var(--chart-1))",
     },
 };
 
-const recentActivities = [
-    { name: 'Olivia Martin', action: 'Uploaded sales_2024_Q2.csv', time: '15m ago', image: 'https://placehold.co/100x100' , fallback: 'OM'},
-    { name: 'Jackson Lee', action: 'Created new chart: User Growth', time: '1h ago', image: 'https://placehold.co/100x100', fallback: 'JL' },
-    { name: 'AI Assistant', action: 'New insight on revenue trends', time: '3h ago', image: 'https://placehold.co/100x100', fallback: 'AI' },
-    { name: 'Isabella Nguyen', action: 'Connected HubSpot', time: '5h ago', image: 'https://placehold.co/100x100', fallback: 'IN' },
+const geoDistributionData = [
+    { country: 'United States', users: '2,500', change: '+15.2%', flag: '🇺🇸' },
+    { country: 'Great Britain', users: '1,800', change: '-5.1%', flag: '🇬🇧' },
+    { country: 'Brazil', users: '1,200', change: '+25.8%', flag: '🇧🇷' },
+    { country: 'India', users: '950', change: '+12.1%', flag: '🇮🇳' },
+    { country: 'Japan', users: '750', change: '+8.3%', flag: '🇯🇵' },
+];
+
+const performanceData = [
+    { source: 'Direct', type: 'Direct', visitors: 2048, revenue: '$12,482', conversion: '6.2%', trend: '+8.1%' },
+    { source: 'Google', type: 'Organic', visitors: 8312, revenue: '$62,129', conversion: '7.4%', trend: '+12.5%' },
+    { source: 'Facebook', type: 'Social', visitors: 4096, revenue: '$20,192', conversion: '5.1%', trend: '-2.3%' },
+    { source: 'Referral', type: 'Referral', visitors: 1024, revenue: '$5,982', conversion: '4.8%', trend: '+3.7%' },
 ];
 
 export default function Home() {
   return (
     <DashboardLayout>
-      <div className="flex flex-col gap-4 md:gap-8">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="flex flex-col gap-8">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {keyMetrics.map(metric => (
             <Card key={metric.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -57,66 +63,115 @@ export default function Home() {
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{metric.value}</div>
-                <p className="text-xs text-muted-foreground">{metric.change}</p>
+                <p className="text-xs text-muted-foreground flex items-center gap-1">
+                    <span className={metric.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}>
+                        {metric.change}
+                    </span>
+                    from last month
+                </p>
               </CardContent>
             </Card>
           ))}
         </div>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <Card className="lg:col-span-2">
-            <CardHeader>
-              <CardTitle>Revenue Overview</CardTitle>
-              <CardDescription>A look at this year's revenue performance.</CardDescription>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <Card className="lg:col-span-2">
+                <CardHeader>
+                    <CardTitle>Age Distribution</CardTitle>
+                    <CardDescription>A look at the age demographics of your user base.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer config={chartConfig} className="h-[300px] w-full">
+                        <LineChart
+                            accessibilityLayer
+                            data={ageDistributionData}
+                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+                        >
+                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                            <XAxis dataKey="age" tickLine={false} axisLine={false} />
+                            <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${Number(value) / 1000}k`} />
+                            <ChartTooltip
+                                cursor={true}
+                                content={<ChartTooltipContent indicator="dot" />}
+                            />
+                            <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={2} dot={{r: 4, fill: 'var(--color-users)'}} activeDot={{r: 6}}/>
+                        </LineChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Geographic Distribution</CardTitle>
+                    <CardDescription>Users by country.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <div className="h-[150px] bg-muted rounded-lg flex items-center justify-center">
+                        <p className="text-sm text-muted-foreground">Map Placeholder</p>
+                    </div>
+                    <ul className="space-y-2">
+                        {geoDistributionData.map(geo => (
+                            <li key={geo.country} className="flex items-center gap-2 text-sm">
+                               <span className="text-lg">{geo.flag}</span>
+                               <span className="font-medium flex-1">{geo.country}</span>
+                               <span className="text-muted-foreground">{geo.users}</span>
+                               <span className={`flex items-center gap-1 font-medium ${geo.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
+                                    {geo.change.startsWith('+') ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                                    {geo.change.substring(1)}
+                               </span>
+                            </li>
+                        ))}
+                    </ul>
+                </CardContent>
+            </Card>
+        </div>
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle>Distribution Performance</CardTitle>
+                    <CardDescription>Detailed breakdown of traffic sources.</CardDescription>
+                </div>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm" className="gap-1">
+                            <span>Last 30 Days</span>
+                            <ChevronDown className="h-4 w-4" />
+                        </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem>Last 7 Days</DropdownMenuItem>
+                        <DropdownMenuItem>Last 30 Days</DropdownMenuItem>
+                        <DropdownMenuItem>Last 90 Days</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                <RechartsBarChart accessibilityLayer data={overviewData}>
-                  <CartesianGrid vertical={false} />
-                  <XAxis
-                    dataKey="name"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                  />
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                    tickMargin={10}
-                    tickFormatter={(value) => `$${Number(value) / 1000}k`}
-                  />
-                  <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent />}
-                  />
-                  <Legend />
-                  <Bar dataKey="total" fill="var(--color-total)" radius={4} />
-                </RechartsBarChart>
-              </ChartContainer>
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Source</TableHead>
+                            <TableHead>Type</TableHead>
+                            <TableHead className="text-right">Visitors</TableHead>
+                            <TableHead className="text-right">Revenue</TableHead>
+                            <TableHead className="text-right">Conversion</TableHead>
+                            <TableHead className="text-right">Trend</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {performanceData.map((data, index) => (
+                            <TableRow key={index}>
+                                <TableCell className="font-medium">{data.source}</TableCell>
+                                <TableCell>
+                                    <Badge variant="outline">{data.type}</Badge>
+                                </TableCell>
+                                <TableCell className="text-right">{data.visitors.toLocaleString()}</TableCell>
+                                <TableCell className="text-right">{data.revenue}</TableCell>
+                                <TableCell className="text-right">{data.conversion}</TableCell>
+                                <TableCell className={`text-right font-medium ${data.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>{data.trend}</TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
             </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Activity Feed</CardTitle>
-              <CardDescription>Recent actions from your team and AI.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {recentActivities.map((activity, index) => (
-                  <div key={index} className="flex items-center gap-4">
-                    <Avatar className="h-9 w-9 border" data-ai-hint="person abstract">
-                      <AvatarImage src={activity.image} alt="Avatar" />
-                      <AvatarFallback>{activity.fallback}</AvatarFallback>
-                    </Avatar>
-                    <div className="grid flex-1 gap-1">
-                      <p className="text-sm font-medium leading-none">{activity.name}</p>
-                      <p className="text-sm text-muted-foreground truncate">{activity.action}</p>
-                    </div>
-                    <div className="ml-auto text-sm text-muted-foreground">{activity.time}</div>
-                  </div>
-              ))}
-            </CardContent>
-          </Card>
-        </div>
+        </Card>
       </div>
     </DashboardLayout>
   );
