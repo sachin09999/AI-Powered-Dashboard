@@ -157,12 +157,12 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         </SidebarFooter>
       </Sidebar>
       <SidebarInset className="flex flex-col">
-        <header className="flex h-16 items-center justify-between gap-4 border-b bg-background px-4 md:px-6 sticky top-0 z-10">
+        <header className="flex h-16 items-center justify-between gap-4 border-b bg-transparent px-4 md:px-6 sticky top-0 z-10">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="md:hidden" />
             <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input type="search" placeholder="Search..." className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px] bg-card" />
+                <Input type="search" placeholder="Search..." className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px] bg-card/60" />
             </div>
           </div>
           <div className="flex items-center gap-2">
