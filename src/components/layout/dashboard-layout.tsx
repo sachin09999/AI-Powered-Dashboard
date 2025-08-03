@@ -12,6 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import React from 'react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { AiChatWidget } from '@/components/ai/ai-chat-widget';
 
 const navGroups = [
     {
@@ -222,6 +223,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
         <main className="flex-1 overflow-y-auto p-4 md:p-8">
           {children}
         </main>
+        <AiChatWidget />
       </SidebarInset>
     </SidebarProvider>
   );
