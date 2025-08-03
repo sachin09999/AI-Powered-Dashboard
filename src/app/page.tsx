@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
 
 const keyMetrics = [
   { title: 'Total Revenue', value: '$45,231.89', change: '+20.1%', changeType: 'increase', icon: DollarSign },
@@ -104,8 +105,15 @@ export default function Home() {
                     <CardDescription>Users by country.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                     <div className="h-[150px] bg-muted rounded-lg flex items-center justify-center">
-                        <p className="text-sm text-muted-foreground">Map Placeholder</p>
+                     <div className="h-[150px] bg-muted rounded-lg flex items-center justify-center overflow-hidden">
+                        <Image 
+                            src="https://placehold.co/600x400"
+                            alt="World map"
+                            width={600}
+                            height={400}
+                            className="object-cover w-full h-full"
+                            data-ai-hint="world map"
+                        />
                     </div>
                     <ul className="space-y-2">
                         {geoDistributionData.map(geo => (
