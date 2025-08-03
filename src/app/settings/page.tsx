@@ -1,3 +1,4 @@
+
 'use client';
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
@@ -36,6 +37,27 @@ export default function SettingsPage() {
             </div>
              <div className="flex justify-end">
                 <Button>Update Password</Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Data Analysis Context</CardTitle>
+            <CardDescription>
+              Define the subject of your data analysis to customize the dashboard.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid gap-2">
+              <Label htmlFor="analysis-subject">Subject of Analysis</Label>
+              <Input
+                id="analysis-subject"
+                placeholder="e.g., SaaS Subscribers, Dental Clinic Patients, E-commerce Sales"
+              />
+            </div>
+            <div className="flex justify-end">
+              <Button>Save Context</Button>
             </div>
           </CardContent>
         </Card>
