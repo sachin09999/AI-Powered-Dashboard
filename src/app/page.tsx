@@ -82,7 +82,7 @@ export default function Home() {
                 </CardHeader>
                 <CardContent>
                     <ChartContainer config={chartConfig} className="h-[300px] w-full">
-                        <LineChart
+                        <BarChart
                             accessibilityLayer
                             data={ageDistributionData}
                             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -94,8 +94,8 @@ export default function Home() {
                                 cursor={true}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Line dataKey="users" type="monotone" stroke="var(--color-users)" strokeWidth={2} dot={true} />
-                        </LineChart>
+                            <Bar dataKey="users" fill="var(--color-users)" radius={[4, 4, 0, 0]} />
+                        </BarChart>
                     </ChartContainer>
                 </CardContent>
             </Card>
@@ -109,7 +109,7 @@ export default function Home() {
                         <ChartContainer config={{}} className="h-full w-full">
                             <RechartsPieChart>
                                 <Tooltip content={<ChartTooltipContent nameKey="country" hideLabel />} />
-                                <Pie data={geoDistributionData} dataKey="users" nameKey="country" cx="50%" cy="50%" outerRadius={80}>
+                                <Pie data={geoDistributionData} dataKey="users" nameKey="country" cx="50%" cy="50%" outerRadius={80} innerRadius={60}>
                                     {geoDistributionData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.fill} />
                                     ))}
