@@ -4,7 +4,7 @@
  * @fileOverview A flow that summarizes data trends and answers natural language questions about the data.
  *
  * - summarizeDataTrends - A function that handles the data summarization process.
- * - SummarizeDataTrendsInput - The input type for the summarizeDataTrends function.
+ * - SummarizeDataTrendsInput - The input type for the summarizeDataTrends function
  * - SummarizeDataTrendsOutput - The return type for the summarizeDataTrends function.
  */
 
