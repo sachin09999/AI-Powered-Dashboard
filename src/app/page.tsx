@@ -66,11 +66,11 @@ const salesChartConfig = {
 };
 
 const recentTransactionsData = [
-    { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+$1,999.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
-    { name: 'Jackson Lee', email: 'jackson.lee@email.com', amount: '+$39.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
-    { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com', amount: '+$299.00', status: 'Pending', avatar: 'https://placehold.co/40x40' },
-    { name: 'William Kim', email: 'will@email.com', amount: '+$99.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
-    { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+$39.00', status: 'Paid', avatar: 'https://placehold.co/40x40' },
+    { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+$1,999.00', status: 'Paid' },
+    { name: 'Jackson Lee', email: 'jackson.lee@email.com', amount: '+$39.00', status: 'Paid' },
+    { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com', amount: '+$299.00', status: 'Pending' },
+    { name: 'William Kim', email: 'will@email.com', amount: '+$99.00', status: 'Paid' },
+    { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+$39.00', status: 'Paid' },
 ];
 
 const performanceData = [
@@ -207,7 +207,6 @@ export default function Home() {
                                     <TableCell>
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
-                                                <AvatarImage src={transaction.avatar} alt="Avatar" data-ai-hint="person" />
                                                 <AvatarFallback>
                                                   <User className="h-5 w-5" />
                                                 </AvatarFallback>
