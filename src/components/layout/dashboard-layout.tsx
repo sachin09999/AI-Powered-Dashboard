@@ -143,19 +143,6 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             ))}
         </SidebarContent>
         <SidebarFooter className="p-4 mt-auto">
-             <div className="flex flex-col gap-2 group-data-[collapsible=icon]:hidden">
-                <SidebarSeparator />
-                <Button variant="ghost" className="justify-start gap-2">
-                    <LifeBuoy className="h-5 w-5" />
-                    <span>Support</span>
-                </Button>
-                <div className="p-4 rounded-lg bg-primary/10 text-center">
-                    <Rocket className="mx-auto h-8 w-8 text-primary mb-2" />
-                    <p className="font-bold mb-1">Upgrade your Plan</p>
-                    <p className="text-xs text-muted-foreground mb-4">Unlock all features and get unlimited access.</p>
-                    <Button size="sm" className="w-full">Upgrade</Button>
-                </div>
-            </div>
         </SidebarFooter>
       </Sidebar>
       <SidebarInset className="flex flex-col">
