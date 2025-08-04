@@ -1,5 +1,3 @@
-
-
 'use client';
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
@@ -143,7 +141,7 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
     };
 
   return (
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col gap-6">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {keyMetrics.filter(metric => widgets[metric.id]).map(metric => (
