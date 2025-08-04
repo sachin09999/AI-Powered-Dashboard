@@ -37,14 +37,15 @@ const navGroups = [
         title: 'OTHER',
         items: [
             { href: '/analytics', label: 'Analytic', icon: BarChart3 },
-            { href: '/performance', label: 'Performance', icon: Tv },
+            { href: '/charts', label: 'Charts', icon: Tv },
+            { href: '/data', label: 'Data', icon: GitBranch },
         ]
     },
     {
         title: 'ACCOUNT',
         items: [
             { href: '/profile', label: 'Profile', icon: User },
-            { href: '/settings', label: 'Members', icon: Users },
+            { href: '/settings', label: 'Settings', icon: Settings },
         ]
     }
 ];
@@ -184,7 +185,9 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
   }
 
   const childrenWithProps = React.Children.map(children, child => {
+    // Checking isValidElement is the safe way and avoids a typescript error too.
     if (React.isValidElement(child)) {
+      // Pass widgets to all pages, but only Home will use it.
       return React.cloneElement(child, { widgets } as any);
     }
     return child;
@@ -276,7 +279,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             <Button variant="primary" size="sm" className="gap-1.5" onClick={exportData}><Upload className="h-4 w-4" /> Export</Button>
           </div>
         </header>
-        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
           {childrenWithProps}
         </main>
         <AiChatWidget />
