@@ -20,8 +20,9 @@ export default function ProfilePage() {
           <CardContent className="space-y-6">
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20 border">
-                <AvatarImage src="https://placehold.co/100x100" alt="User avatar" data-ai-hint="person portrait" />
-                <AvatarFallback><User className="h-10 w-10 text-muted-foreground" /></AvatarFallback>
+                <AvatarFallback>
+                  <User className="h-10 w-10" />
+                </AvatarFallback>
               </Avatar>
               <div className="grid gap-2">
                 <Button>Change Photo</Button>
