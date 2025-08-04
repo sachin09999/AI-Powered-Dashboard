@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart, Home, UploadCloud, Moon, Sun, Bell, User, LogOut, Settings, Search, ChevronDown, LifeBuoy, Rocket } from 'lucide-react';
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarTrigger, SidebarFooter, SidebarGroup, SidebarGroupLabel, SidebarSeparator } from '@/components/ui/sidebar';
+import { BarChart, Home, UploadCloud, Moon, Sun, Bell, User, LogOut, Settings, Search, ChevronDown, Rocket } from 'lucide-react';
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarTrigger, SidebarFooter, SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/theme-provider';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
@@ -54,7 +54,7 @@ function UserNav() {
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
             <AvatarImage src="https://placehold.co/100x100" alt="User avatar" data-ai-hint="person portrait" />
-            <AvatarFallback>J</AvatarFallback>
+            <AvatarFallback className="text-muted-foreground">J</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

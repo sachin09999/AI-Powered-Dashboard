@@ -20,12 +20,12 @@ const keyMetrics = [
 ];
 
 const ageDistributionData = [
-  { age: '18-24', users: 3800 },
-  { age: '25-34', users: 5200 },
-  { age: '35-44', users: 4500 },
-  { age: '45-54', users: 6100 },
-  { age: '55-64', users: 5400 },
-  { age: '65+', users: 4800 },
+    { month: 'Jan', age: '18-24', users: 3800 },
+    { month: 'Feb', age: '25-34', users: 5200 },
+    { month: 'Mar', age: '35-44', users: 4500 },
+    { month: 'Apr', age: '45-54', users: 6100 },
+    { month: 'May', age: '55-64', users: 5400 },
+    { month: 'Jun', age: '65+', users: 4800 },
 ];
 
 const ageChartConfig = {
@@ -110,8 +110,8 @@ export default function Home() {
                     <CardDescription>A look at the age demographics of your user base.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={ageChartConfig} className="h-[300px] w-full">
-                        <BarChart
+                     <ChartContainer config={ageChartConfig} className="h-[300px] w-full">
+                        <LineChart
                             accessibilityLayer
                             data={ageDistributionData}
                             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
@@ -123,8 +123,8 @@ export default function Home() {
                                 cursor={true}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Bar dataKey="users" fill="var(--color-users)" radius={[4, 4, 0, 0]} />
-                        </BarChart>
+                            <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={2} dot={false} />
+                        </LineChart>
                     </ChartContainer>
                 </CardContent>
             </Card>
@@ -134,11 +134,11 @@ export default function Home() {
                     <CardDescription>Users by country.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <div className="h-[200px] flex items-center justify-center">
+                     <div className="h-[200px] flex items-center justify-center">
                         <ChartContainer config={{}} className="h-full w-full">
                             <RechartsPieChart>
                                 <Tooltip content={<ChartTooltipContent nameKey="country" hideLabel />} />
-                                <Pie data={geoDistributionData} dataKey="users" nameKey="country" cx="50%" cy="50%" outerRadius={80} innerRadius={60}>
+                                <Pie data={geoDistributionData} dataKey="users" nameKey="country" cx="50%" cy="50%" outerRadius={80}>
                                     {geoDistributionData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.fill} />
                                     ))}
@@ -208,7 +208,7 @@ export default function Home() {
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
                                                 <AvatarImage src={transaction.avatar} alt="Avatar" data-ai-hint="person" />
-                                                <AvatarFallback>{transaction.name.charAt(0)}</AvatarFallback>
+                                                <AvatarFallback className="text-muted-foreground">{transaction.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>
                                                 <p className="font-medium">{transaction.name}</p>
