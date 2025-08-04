@@ -4,7 +4,8 @@
 
 **InsightFlow AI** is a cutting-edge, AI-powered analytics dashboard built with Next.js, Tailwind CSS, and Genkit. It provides a stunning, dynamic, and feature-rich interface for visualizing and interacting with your data. With a sleek "Cyberpunk Sunset" theme and real-time data simulation, this dashboard is designed to impress.
 
-![InsightFlow AI Dashboard](https://placehold.co/800x450.png?text=InsightFlow+Dashboard+Preview)
+![InsightFlow AI Dashboard](<img width="1353" height="623" alt="image" src="https://github.com/user-attachments/assets/dc00dd66-1ba4-4f6a-9ca2-8a55c14608b9" />
+)
 *A preview of the stunning, glassmorphic InsightFlow AI dashboard in action.*
 
 ## ✨ Key Features
