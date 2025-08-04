@@ -181,7 +181,7 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
         
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <Card className="lg:col-span-2">
-                <CardHeader>
+                <CardHeader className="justify-between">
                     <CardTitle>Revenue</CardTitle>
                     <div className="ml-auto">
                          <DropdownMenu>
@@ -213,7 +213,7 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
                 </CardContent>
             </Card>
             <Card>
-                <CardHeader>
+                <CardHeader className="justify-between">
                     <CardTitle>Traffic Record</CardTitle>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -243,7 +243,7 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <Card>
-                <CardHeader>
+                <CardHeader className="justify-between">
                     <CardTitle>E-commerce Sales Platform</CardTitle>
                      <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -314,7 +314,7 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
                 </CardContent>
             </Card>
             <Card>
-                <CardHeader>
+                <CardHeader className="justify-between">
                     <CardTitle>Sales Performance</CardTitle>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
