@@ -8,15 +8,16 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/
 import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import React, { useState, useEffect } from 'react';
 
-const keyMetrics = [
+const initialKeyMetrics = [
   { title: 'Total Income', value: 32120.97, change: 12, changeType: 'increase', icon: Wallet, format: 'currency' },
   { title: 'Total Profit', value: 10120.97, change: 1.33, changeType: 'increase', icon: Briefcase, format: 'currency' },
   { title: 'Total Views', value: 32120, change: 3.5, changeType: 'decrease', icon: Eye, format: 'number' },
   { title: 'Refunded', value: 2120, change: 13, changeType: 'increase', icon: ShieldX, format: 'number' },
 ];
 
-const revenueData = [
+const initialRevenueData = [
   { month: 'Jun', totalRevenue: 8000, totalTarget: 9000 },
   { month: 'Jul', totalRevenue: 12000, totalTarget: 11000 },
   { month: 'Aug', totalRevenue: 10000, totalTarget: 11500 },
@@ -27,7 +28,7 @@ const revenueData = [
   { month: 'Jan', totalRevenue: 21000, totalTarget: 23000 },
 ];
 
-const trafficData = [
+const initialTrafficData = [
     { day: 'Sun', primeTime: 4000, usualTime: 2400 },
     { day: 'Mon', primeTime: 3000, usualTime: 1398 },
     { day: 'Tue', primeTime: 2000, usualTime: 9800 },
@@ -37,20 +38,69 @@ const trafficData = [
     { day: 'Sat', primeTime: 3490, usualTime: 4300 },
 ];
 
-const ecommerceData = [
+const initialEcommerceData = [
     { name: 'Amazon', value: 35, fill: 'hsl(var(--chart-1))' },
     { name: 'Ebay', value: 25, fill: 'hsl(var(--chart-2))' },
     { name: 'Alibaba', value: 25, fill: 'hsl(var(--chart-3))' },
     { name: 'Shopify', value: 16, fill: 'hsl(var(--chart-4))' },
 ];
 
-const salesPerformanceData = {
+const initialSalesPerformanceData = {
     sinceYesterday: 18.93,
     totalSales: 8930.79,
     averageSales: 10120.97
 }
 
 export default function Home() {
+    const [keyMetrics, setKeyMetrics] = useState(initialKeyMetrics);
+    const [revenueData, setRevenueData] = useState(initialRevenueData);
+    const [trafficData, setTrafficData] = useState(initialTrafficData);
+    const [ecommerceData, setEcommerceData] = useState(initialEcommerceData);
+    const [salesPerformanceData, setSalesPerformanceData] = useState(initialSalesPerformanceData);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setKeyMetrics(prevMetrics =>
+                prevMetrics.map(metric => ({
+                    ...metric,
+                    value: metric.value * (1 + (Math.random() - 0.48) / 100),
+                    change: metric.change * (1 + (Math.random() - 0.5) / 50),
+                }))
+            );
+            setRevenueData(prevData =>
+                prevData.map(item => ({
+                    ...item,
+                    totalRevenue: Math.max(5000, item.totalRevenue * (1 + (Math.random() - 0.45) / 50)),
+                    totalTarget: Math.max(5000, item.totalTarget * (1 + (Math.random() - 0.48) / 50)),
+                }))
+            );
+            setTrafficData(prevData =>
+                prevData.map(item => ({
+                    ...item,
+                    primeTime: Math.max(1000, item.primeTime + Math.floor(Math.random() * 200) - 100),
+                    usualTime: Math.max(1000, item.usualTime + Math.floor(Math.random() * 200) - 100),
+                }))
+            );
+             setEcommerceData(prevData => {
+                const newTotal = prevData.reduce((acc, item) => acc + item.value, 0);
+                const adjustments = prevData.map(() => Math.random() * 2 - 1);
+                return prevData.map((item, index) => ({
+                    ...item,
+                    value: Math.max(5, item.value + adjustments[index] * (newTotal / 100))
+                }));
+            });
+            setSalesPerformanceData(prevData => ({
+                ...prevData,
+                sinceYesterday: prevData.sinceYesterday * (1 + (Math.random() - 0.5) / 20),
+                totalSales: prevData.totalSales * (1 + (Math.random() - 0.48) / 100),
+                averageSales: prevData.averageSales * (1 + (Math.random() - 0.49) / 100),
+            }));
+
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, []);
+
     const revenueChartConfig = {
         totalRevenue: { label: "Total Revenue", color: "hsl(var(--chart-1))" },
         totalTarget: { label: "Total Target", color: "hsl(var(--chart-2))" },
@@ -236,21 +286,21 @@ export default function Home() {
                         <div className="relative h-32 w-32">
                              <svg className="transform -rotate-90" viewBox="0 0 120 120">
                                 <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(var(--border))" strokeWidth="12" />
-                                <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(var(--primary))" strokeWidth="12" strokeDasharray="339.292" strokeDashoffset={339.292 - (339.292 * 75) / 100} strokeLinecap="round" />
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(var(--primary))" strokeWidth="12" strokeDasharray="339.292" strokeDashoffset={339.292 - (339.292 * salesPerformanceData.sinceYesterday) / 100} strokeLinecap="round" />
                             </svg>
                              <div className="absolute inset-0 flex flex-col items-center justify-center">
                                 <p className="text-xs text-muted-foreground">Since yesterday</p>
-                                <p className="text-xl font-bold flex items-center">{salesPerformanceData.sinceYesterday}% <TrendingUp className="h-4 w-4 text-green-500 ml-1" /></p>
+                                <p className="text-xl font-bold flex items-center">{salesPerformanceData.sinceYesterday.toFixed(2)}% <TrendingUp className="h-4 w-4 text-green-500 ml-1" /></p>
                             </div>
                         </div>
                         <div className="mt-4 flex justify-around w-full">
                             <div className="text-center">
                                 <p className="text-sm text-muted-foreground">Total sales per day</p>
-                                <p className="font-semibold">${salesPerformanceData.totalSales.toLocaleString()}</p>
+                                <p className="font-semibold">${salesPerformanceData.totalSales.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                             </div>
                             <div className="text-center">
                                 <p className="text-sm text-muted-foreground">Average sales</p>
-                                <p className="font-semibold">${salesPerformanceData.averageSales.toLocaleString()}</p>
+                                <p className="font-semibold">${salesPerformanceData.averageSales.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
                             </div>
                         </div>
                     </div>
@@ -260,4 +310,3 @@ export default function Home() {
       </div>
     </DashboardLayout>
   );
-}
