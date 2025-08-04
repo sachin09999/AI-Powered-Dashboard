@@ -1,6 +1,5 @@
 'use client';
 
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -9,7 +8,6 @@ import { Label } from '@/components/ui/label';
 
 export default function ProfilePage() {
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         <Card>
           <CardHeader>
@@ -42,6 +40,5 @@ export default function ProfilePage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
   );
 }

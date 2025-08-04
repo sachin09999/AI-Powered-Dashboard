@@ -1,42 +1,42 @@
-
 'use client';
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
     LayoutGrid, Home, Box, ShoppingCart, MessageSquare, Mail, BarChart3, GitBranch, Tv,
-    User, Users, Settings, LogOut, Search, Share, Upload, SlidersHorizontal, PanelLeft
+    User, Users, Settings, LogOut, Search, Share, Upload, SlidersHorizontal, PanelLeft, Copy, Check
 } from 'lucide-react';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarTrigger, SidebarFooter, SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Input } from '@/components/ui/input';
-import React from 'react';
+import React, { useState } from 'react';
 import { AiChatWidget } from '@/components/ai/ai-chat-widget';
 import { useAlerts } from '@/context/alerts-context';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { Bell } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { useToast } from '@/hooks/use-toast';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 const navGroups = [
     {
         title: 'MAIN MENU',
         items: [
             { href: '/', label: 'Dashboard', icon: LayoutGrid },
-            { href: '#', label: 'Product', icon: Box },
-            { href: '#', label: 'Order', icon: ShoppingCart },
-            { href: '#', label: 'Customers', icon: Users },
-            { href: '#', label: 'Chat', icon: MessageSquare },
+            { href: '/products', label: 'Product', icon: Box },
+            { href: '/orders', label: 'Order', icon: ShoppingCart },
+            { href: '/customers', label: 'Customers', icon: Users },
         ]
     },
     {
         title: 'OTHER',
         items: [
-            { href: '#', label: 'Email', icon: Mail },
-            { href: '#', label: 'Analytic', icon: BarChart3 },
-            { href: '#', label: 'Integration', icon: GitBranch },
-            { href: '/charts', label: 'Performance', icon: Tv },
+            { href: '/analytics', label: 'Analytic', icon: BarChart3 },
+            { href: '/performance', label: 'Performance', icon: Tv },
         ]
     },
     {
@@ -82,8 +82,101 @@ function Notifications() {
     );
 }
 
+function ShareDialog() {
+    const [hasCopied, setHasCopied] = useState(false);
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText('https://insightflow.app/dashboard/shared-view');
+        setHasCopied(true);
+        setTimeout(() => setHasCopied(false), 2000);
+    };
+
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1.5"><Share className="h-4 w-4" /> Share</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Share Dashboard</DialogTitle>
+                    <DialogDescription>
+                        Anyone with this link will be able to view this dashboard.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="flex items-center space-x-2">
+                    <Input value="https://insightflow.app/dashboard/shared-view" readOnly />
+                    <Button type="button" size="sm" onClick={copyToClipboard}>
+                        {hasCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                </div>
+                 <DialogFooter>
+                    <DialogClose asChild>
+                        <Button type="button" variant="secondary">Close</Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    );
+}
+
+function CustomizeWidgetsDialog({ widgets, setWidgets }: { widgets: any, setWidgets: any }) {
+    return (
+        <Dialog>
+            <DialogTrigger asChild>
+                 <Button variant="outline" size="sm" className="gap-1.5"><SlidersHorizontal className="h-4 w-4" /> Customize Widgets</Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Customize Widgets</DialogTitle>
+                    <DialogDescription>
+                       Toggle the visibility of dashboard widgets.
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-4">
+                   {Object.keys(widgets).map((key) => (
+                       <div key={key} className="flex items-center justify-between">
+                            <Label htmlFor={key} className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</Label>
+                           <Switch
+                                id={key}
+                                checked={widgets[key]}
+                                onCheckedChange={() => setWidgets((prev: any) => ({ ...prev, [key]: !prev[key] }))}
+                           />
+                       </div>
+                   ))}
+                </div>
+                <DialogFooter>
+                    <DialogClose asChild>
+                        <Button type="button" variant="secondary">Done</Button>
+                    </DialogClose>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const { toast } = useToast();
+  const [widgets, setWidgets] = useState({
+      totalIncome: true,
+      totalProfit: true,
+      totalViews: true,
+      refunded: true,
+  });
+
+  const exportData = () => {
+    toast({
+        title: "Export Initiated",
+        description: "Your data export will be available shortly.",
+    });
+  }
+
+  const childrenWithProps = React.Children.map(children, child => {
+    if (React.isValidElement(child)) {
+      return React.cloneElement(child, { widgets } as any);
+    }
+    return child;
+  });
 
   return (
     <SidebarProvider>
@@ -165,13 +258,13 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex items-center gap-2">
             <Notifications />
-            <Button variant="outline" size="sm" className="gap-1.5"><SlidersHorizontal className="h-4 w-4" /> Customize Widgets</Button>
-            <Button variant="outline" size="sm" className="gap-1.5"><Share className="h-4 w-4" /> Share</Button>
-            <Button variant="primary" size="sm" className="gap-1.5"><Upload className="h-4 w-4" /> Export</Button>
+            <CustomizeWidgetsDialog widgets={widgets} setWidgets={setWidgets} />
+            <ShareDialog />
+            <Button variant="primary" size="sm" className="gap-1.5" onClick={exportData}><Upload className="h-4 w-4" /> Export</Button>
           </div>
         </header>
         <main className="flex-1 overflow-y-auto p-4 md:p-8">
-          {children}
+          {childrenWithProps}
         </main>
         <AiChatWidget />
       </SidebarInset>

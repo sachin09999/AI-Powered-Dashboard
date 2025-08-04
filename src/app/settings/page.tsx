@@ -1,6 +1,5 @@
 'use client';
 
-import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,7 +10,6 @@ import { useTheme } from '@/components/theme-provider';
 export default function SettingsPage() {
   const { theme, toggleTheme } = useTheme();
   return (
-    <DashboardLayout>
       <div className="space-y-6">
         <Card>
           <CardHeader>
@@ -96,6 +94,5 @@ export default function SettingsPage() {
           </CardContent>
         </Card>
       </div>
-    </DashboardLayout>
   );
 }

@@ -3,6 +3,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { AlertsProvider } from '@/context/alerts-context';
+import { DashboardLayout } from '@/components/layout/dashboard-layout';
 
 export const metadata: Metadata = {
   title: 'InsightFlow',
@@ -27,7 +28,9 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <ThemeProvider>
           <AlertsProvider>
-            {children}
+             <DashboardLayout>
+                {children}
+             </DashboardLayout>
             <Toaster />
           </AlertsProvider>
         </ThemeProvider>

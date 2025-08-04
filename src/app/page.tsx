@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
@@ -9,12 +10,13 @@ import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, Responsive
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import React, { useState, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
 const initialKeyMetrics = [
-  { title: 'Total Income', value: 32120.97, change: 12, changeType: 'increase', icon: Wallet, format: 'currency' },
-  { title: 'Total Profit', value: 10120.97, change: 1.33, changeType: 'increase', icon: Briefcase, format: 'currency' },
-  { title: 'Total Views', value: 32120, change: 3.5, changeType: 'decrease', icon: Eye, format: 'number' },
-  { title: 'Refunded', value: 2120, change: 13, changeType: 'increase', icon: ShieldX, format: 'number' },
+  { id: 'totalIncome', title: 'Total Income', value: 32120.97, change: 12, changeType: 'increase', icon: Wallet, format: 'currency' },
+  { id: 'totalProfit', title: 'Total Profit', value: 10120.97, change: 1.33, changeType: 'increase', icon: Briefcase, format: 'currency' },
+  { id: 'totalViews', title: 'Total Views', value: 32120, change: 3.5, changeType: 'decrease', icon: Eye, format: 'number' },
+  { id: 'refunded', title: 'Refunded', value: 2120, change: 13, changeType: 'increase', icon: ShieldX, format: 'number' },
 ];
 
 const initialRevenueData = [
@@ -51,7 +53,8 @@ const initialSalesPerformanceData = {
     averageSales: 10120.97
 }
 
-export default function Home() {
+export default function Home({ widgets = { totalIncome: true, totalProfit: true, totalViews: true, refunded: true } }: { widgets?: any }) {
+    const { toast } = useToast();
     const [keyMetrics, setKeyMetrics] = useState(initialKeyMetrics);
     const [revenueData, setRevenueData] = useState(initialRevenueData);
     const [trafficData, setTrafficData] = useState(initialTrafficData);
@@ -111,12 +114,18 @@ export default function Home() {
         usualTime: { label: "Usual Time", color: "hsl(var(--chart-2))" },
     }
 
+    const handleCardAction = (action: string) => {
+        toast({
+            title: `${action} Requested`,
+            description: `The action "${action}" has been successfully triggered.`,
+        });
+    };
+
   return (
-    <DashboardLayout>
       <div className="flex flex-col gap-8">
         <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-          {keyMetrics.map(metric => (
+          {keyMetrics.filter(metric => widgets[metric.id]).map(metric => (
             <Card key={metric.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <div className="flex items-center gap-2">
@@ -130,8 +139,8 @@ export default function Home() {
                         <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Download Report</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleCardAction('View Details')}>View Details</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => handleCardAction('Download Report')}>Download Report</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
               </CardHeader>
@@ -192,8 +201,8 @@ export default function Home() {
                              <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Download Report</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleCardAction('View Details')}>View Details</DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => handleCardAction('Download Report')}>Download Report</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </CardHeader>
@@ -222,8 +231,8 @@ export default function Home() {
                              <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Download Report</DropdownMenuItem>
+                           <DropdownMenuItem onClick={() => handleCardAction('View Details')}>View Details</DropdownMenuItem>
+                           <DropdownMenuItem onClick={() => handleCardAction('Download Report')}>Download Report</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </CardHeader>
@@ -276,8 +285,8 @@ export default function Home() {
                              <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                            <DropdownMenuItem>View Details</DropdownMenuItem>
-                            <DropdownMenuItem>Download Report</DropdownMenuItem>
+                           <DropdownMenuItem onClick={() => handleCardAction('View Details')}>View Details</DropdownMenuItem>
+                           <DropdownMenuItem onClick={() => handleCardAction('Download Report')}>Download Report</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </CardHeader>
@@ -308,5 +317,5 @@ export default function Home() {
             </Card>
         </div>
       </div>
-    </DashboardLayout>
   );
+}
