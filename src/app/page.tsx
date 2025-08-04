@@ -2,7 +2,7 @@
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Users, DollarSign, Activity, TrendingUp, MoreHorizontal, ArrowUpRight, ArrowDownRight, ChevronDown } from 'lucide-react';
+import { Users, DollarSign, Activity, TrendingUp, MoreHorizontal, ArrowUpRight, ArrowDownRight, ChevronDown, User } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -208,7 +208,7 @@ export default function Home() {
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
                                                 <AvatarImage src={transaction.avatar} alt="Avatar" data-ai-hint="person" />
-                                                <AvatarFallback>{transaction.name.charAt(0)}</AvatarFallback>
+                                                <AvatarFallback><User className="h-5 w-5 text-muted-foreground" /></AvatarFallback>
                                             </Avatar>
                                             <div>
                                                 <p className="font-medium">{transaction.name}</p>
