@@ -53,6 +53,15 @@ const initialSalesPerformanceData = {
     averageSales: 10120.97
 }
 
+const initialGlobalReachData = [
+    { country: 'USA', users: 12500, fill: 'var(--color-users)' },
+    { country: 'Germany', users: 8200, fill: 'var(--color-users)' },
+    { country: 'Japan', users: 7800, fill: 'var(--color-users)' },
+    { country: 'UK', users: 6500, fill: 'var(--color-users)' },
+    { country: 'France', users: 5400, fill: 'var(--color-users)' },
+];
+
+
 export default function Home({ widgets = { totalIncome: true, totalProfit: true, totalViews: true, refunded: true } }: { widgets?: any }) {
     const { toast } = useToast();
     const [keyMetrics, setKeyMetrics] = useState(initialKeyMetrics);
@@ -60,6 +69,8 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
     const [trafficData, setTrafficData] = useState(initialTrafficData);
     const [ecommerceData, setEcommerceData] = useState(initialEcommerceData);
     const [salesPerformanceData, setSalesPerformanceData] = useState(initialSalesPerformanceData);
+    const [globalReachData, setGlobalReachData] = useState(initialGlobalReachData);
+
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -98,6 +109,12 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
                 totalSales: prevData.totalSales * (1 + (Math.random() - 0.48) / 100),
                 averageSales: prevData.averageSales * (1 + (Math.random() - 0.49) / 100),
             }));
+             setGlobalReachData(prevData =>
+                prevData.map(item => ({
+                    ...item,
+                    users: Math.max(2000, item.users + Math.floor(Math.random() * 500) - 250),
+                })).sort((a,b) => b.users - a.users)
+            );
 
         }, 3000);
 
@@ -112,6 +129,10 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
     const trafficChartConfig = {
         primeTime: { label: "Prime Time", color: "hsl(var(--chart-1))" },
         usualTime: { label: "Usual Time", color: "hsl(var(--chart-2))" },
+    }
+
+    const globalReachChartConfig = {
+        users: { label: "Users", color: "hsl(var(--chart-1))" },
     }
 
     const handleCardAction = (action: string) => {
@@ -264,17 +285,34 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
                     <CardTitle>Global Reach</CardTitle>
                 </CardHeader>
                 <CardContent>
-                    <div className="flex flex-col items-center justify-center h-full">
-                        <img src="https://i.imgur.com/gSHeA2h.png" alt="World Map" className="h-32 object-contain" data-ai-hint="world map" />
-                        <div className="mt-4 text-center">
-                            <p className="text-sm text-muted-foreground">Campaign Reach</p>
-                            <p className="text-lg font-semibold">11 country</p>
-                        </div>
-                         <div className="mt-2 text-center">
-                            <p className="text-sm text-muted-foreground">Period</p>
-                            <p className="text-lg font-semibold">1 year</p>
-                        </div>
-                    </div>
+                    <ChartContainer config={globalReachChartConfig} className="h-[250px] w-full">
+                        <BarChart
+                            data={globalReachData}
+                            layout="vertical"
+                            margin={{ left: 10, right: 10, top: 10, bottom: 10 }}
+                        >
+                            <CartesianGrid horizontal={false} />
+                            <YAxis
+                                dataKey="country"
+                                type="category"
+                                tickLine={false}
+                                tickMargin={10}
+                                axisLine={false}
+                                className="text-xs"
+                            />
+                            <XAxis type="number" hide />
+                            <Tooltip
+                                cursor={false}
+                                content={<ChartTooltipContent indicator="dot" />}
+                            />
+                            <Bar
+                                dataKey="users"
+                                name="Users"
+                                radius={4}
+                                fill="var(--color-users)"
+                            />
+                        </BarChart>
+                    </ChartContainer>
                 </CardContent>
             </Card>
             <Card>
