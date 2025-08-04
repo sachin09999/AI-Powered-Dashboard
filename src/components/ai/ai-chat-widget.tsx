@@ -95,7 +95,7 @@ export function AiChatWidget() {
                         </div>
                         <CardDescription>Ask questions about your sample data.</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex-1 flex flex-col p-0">
+                    <CardContent className="flex-1 flex flex-col p-0 overflow-hidden">
                         <ScrollArea className="flex-1 p-4">
                             <div className="space-y-6">
                                 {messages.map((message) => (
