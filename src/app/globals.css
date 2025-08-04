@@ -50,8 +50,8 @@
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 27.5%;
-    --muted-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
@@ -90,7 +90,11 @@
   }
 
   [data-radix-fallback] {
-    background-color: hsl(var(--muted)) !important;
-    color: hsl(var(--muted-foreground)) !important;
+    background-color: hsl(var(--muted));
+    color: hsl(var(--muted-foreground));
+  }
+  .dark [data-radix-fallback] {
+    background-color: hsl(var(--accent));
+    color: hsl(var(--accent-foreground));
   }
 }
