@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { BarChart, Home, UploadCloud, Moon, Sun, Bell, User, LogOut, Settings, Search, ChevronDown, Rocket } from 'lucide-react';
+import { BarChart, Home, UploadCloud, Moon, Sun, Bell, User, LogOut, Settings, Search, ChevronDown, AlertTriangle, Info, CheckCircle } from 'lucide-react';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarTrigger, SidebarFooter, SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/components/theme-provider';
@@ -14,6 +14,8 @@ import { Input } from '@/components/ui/input';
 import React from 'react';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
 import { AiChatWidget } from '@/components/ai/ai-chat-widget';
+import { useAlerts } from '@/context/alerts-context';
+import { cn } from '@/lib/utils';
 
 const navGroups = [
     {
@@ -48,13 +50,21 @@ function ThemeToggle() {
   );
 }
 
+const getInitials = (name: string) => {
+    const names = name.split(' ');
+    if (names.length > 1) {
+        return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+}
+
 function UserNav() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarFallback>JD</AvatarFallback>
+             <AvatarFallback>JD</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -88,16 +98,58 @@ function UserNav() {
   );
 }
 
+function Notifications() {
+    const { alerts } = useAlerts();
+
+    const severityIcons = {
+        high: <AlertTriangle className="h-5 w-5 text-destructive" />,
+        medium: <Info className="h-5 w-5 text-yellow-500" />,
+        low: <CheckCircle className="h-5 w-5 text-green-500" />,
+    };
+
+    return (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                    <Bell className="h-5 w-5" />
+                    {alerts.length > 0 && (
+                        <Badge className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full p-0 text-xs" variant="destructive">
+                            {alerts.length}
+                        </Badge>
+                    )}
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {alerts.length === 0 ? (
+                    <DropdownMenuItem disabled>
+                        <div className="flex items-center gap-3 p-2">
+                            <p className="text-sm text-muted-foreground">No new notifications</p>
+                        </div>
+                    </DropdownMenuItem>
+                ) : (
+                    alerts.map((alert, index) => (
+                        <DropdownMenuItem key={index}>
+                            <div className="flex items-start gap-3 p-2">
+                                <div className="mt-1">
+                                    {severityIcons[alert.severity]}
+                                </div>
+                                <div className="grid gap-1">
+                                    <p className="text-sm font-medium">{alert.title}</p>
+                                    <p className="text-xs text-muted-foreground">{alert.description}</p>
+                                </div>
+                            </div>
+                        </DropdownMenuItem>
+                    ))
+                )}
+            </DropdownMenuContent>
+        </DropdownMenu>
+    );
+}
+
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-
-  const getPageTitle = () => {
-    for (const group of navGroups) {
-        const item = group.items.find(item => item.href === pathname);
-        if (item) return item.label;
-    }
-    return 'Dashboard';
-  }
 
   return (
     <SidebarProvider>
@@ -155,54 +207,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative">
-                  <Bell className="h-5 w-5" />
-                  <Badge className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full p-0 text-xs" variant="destructive">3</Badge>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-80">
-                <DropdownMenuLabel>Notifications</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>
-                    <div className="flex items-start gap-3 p-2">
-                        <Avatar className="h-8 w-8 border" data-ai-hint="abstract tech">
-                            
-                            <AvatarFallback>AI</AvatarFallback>
-                        </Avatar>
-                        <div className="grid gap-1">
-                            <p className="text-sm font-medium">New insight available</p>
-                            <p className="text-xs text-muted-foreground">Sales data shows a 20% increase.</p>
-                        </div>
-                    </div>
-                </DropdownMenuItem>
-                 <DropdownMenuItem>
-                    <div className="flex items-start gap-3 p-2">
-                        <Avatar className="h-8 w-8 border" data-ai-hint="server database">
-                            
-                            <AvatarFallback>DS</AvatarFallback>
-                        </Avatar>
-                        <div className="grid gap-1">
-                            <p className="text-sm font-medium">Data source connected</p>
-                            <p className="text-xs text-muted-foreground">Google Analytics is now synced.</p>
-                        </div>
-                    </div>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <div className="flex items-start gap-3 p-2">
-                        <Avatar className="h-8 w-8 border" data-ai-hint="gears cogs">
-                            
-                            <AvatarFallback>SYS</AvatarFallback>
-                        </Avatar>
-                        <div className="grid gap-1">
-                            <p className="text-sm font-medium">System Update</p>
-                            <p className="text-xs text-muted-foreground">Charts have been updated to v2.</p>
-                        </div>
-                    </div>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Notifications />
             <ThemeToggle />
             <UserNav />
           </div>

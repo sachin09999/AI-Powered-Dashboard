@@ -3,3 +3,4 @@ config();
 
 import '@/ai/flows/recommend-chart-types.ts';
 import '@/ai/flows/summarize-data-trends.ts';
+import '@/ai/flows/detect-anomalies.ts';

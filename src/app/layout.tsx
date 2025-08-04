@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
+import { AlertsProvider } from '@/context/alerts-context';
 
 export const metadata: Metadata = {
   title: 'InsightFlow',
@@ -25,8 +26,10 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased">
         <ThemeProvider>
-          {children}
-          <Toaster />
+          <AlertsProvider>
+            {children}
+            <Toaster />
+          </AlertsProvider>
         </ThemeProvider>
       </body>
     </html>
