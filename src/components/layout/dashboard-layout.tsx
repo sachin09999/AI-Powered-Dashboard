@@ -54,7 +54,7 @@ function UserNav() {
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
             <AvatarImage src="https://placehold.co/100x100" alt="User avatar" data-ai-hint="person portrait" />
-            <AvatarFallback className="text-muted-foreground">J</AvatarFallback>
+            <AvatarFallback>J</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>

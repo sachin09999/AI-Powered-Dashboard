@@ -208,7 +208,7 @@ export default function Home() {
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
                                                 <AvatarImage src={transaction.avatar} alt="Avatar" data-ai-hint="person" />
-                                                <AvatarFallback className="text-muted-foreground">{transaction.name.charAt(0)}</AvatarFallback>
+                                                <AvatarFallback>{transaction.name.charAt(0)}</AvatarFallback>
                                             </Avatar>
                                             <div>
                                                 <p className="font-medium">{transaction.name}</p>
