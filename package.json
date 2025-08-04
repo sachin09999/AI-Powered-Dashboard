@@ -1,5 +1,4 @@
 {
-  "homepage": "https://sachin09999.github.io/AI-Powered-Dashboard",
   "name": "nextn",
   "version": "0.1.0",
   "private": true,
@@ -11,8 +10,6 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@genkit-ai/googleai": "^1.14.1",
