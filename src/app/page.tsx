@@ -3,344 +3,261 @@
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
-import { Users, DollarSign, Activity, TrendingUp, MoreHorizontal, ArrowUpRight, ArrowDownRight, ChevronDown, User } from 'lucide-react';
+import { Wallet, Briefcase, Eye, ShieldX, TrendingUp, MoreHorizontal, ArrowUp, ArrowDown, Users, Globe } from 'lucide-react';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import React, { useState, useEffect } from 'react';
+import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 
-const initialKeyMetrics = [
-  { title: 'Total Revenue', value: 45231.89, change: 20.1, changeType: 'increase', icon: DollarSign, format: 'currency' },
-  { title: 'Subscriptions', value: 2350, change: 180.1, changeType: 'increase', icon: Users, format: 'number' },
-  { title: 'Sales', value: 12234, change: 19, changeType: 'increase', icon: Activity, format: 'number' },
-  { title: 'Active Now', value: 573, change: 201, changeType: 'increase', icon: TrendingUp, format: 'number' },
+const keyMetrics = [
+  { title: 'Total Income', value: 32120.97, change: 12, changeType: 'increase', icon: Wallet, format: 'currency' },
+  { title: 'Total Profit', value: 10120.97, change: 1.33, changeType: 'increase', icon: Briefcase, format: 'currency' },
+  { title: 'Total Views', value: 32120, change: 3.5, changeType: 'decrease', icon: Eye, format: 'number' },
+  { title: 'Refunded', value: 2120, change: 13, changeType: 'increase', icon: ShieldX, format: 'number' },
 ];
 
-const initialAgeDistributionData = [
-    { month: 'Jan', age: '18-24', users: 3800 },
-    { month: 'Feb', age: '25-34', users: 5200 },
-    { month: 'Mar', age: '35-44', users: 4500 },
-    { month: 'Apr', age: '45-54', users: 6100 },
-    { month: 'May', age: '55-64', users: 5400 },
-    { month: 'Jun', age: '65+', users: 4800 },
+const revenueData = [
+  { month: 'Jun', totalRevenue: 8000, totalTarget: 9000 },
+  { month: 'Jul', totalRevenue: 12000, totalTarget: 11000 },
+  { month: 'Aug', totalRevenue: 10000, totalTarget: 11500 },
+  { month: 'Sep', totalRevenue: 15000, totalTarget: 14000 },
+  { month: 'Oct', totalRevenue: 12345.93, totalTarget: 11323.30 },
+  { month: 'Nov', totalRevenue: 18000, totalTarget: 17000 },
+  { month: 'Dec', totalRevenue: 22000, totalTarget: 20000 },
+  { month: 'Jan', totalRevenue: 21000, totalTarget: 23000 },
 ];
 
-const initialGeoDistributionData = [
-    { country: 'United States', users: 2500, change: 15.2, flag: '🇺🇸', fill: 'hsl(var(--chart-1))' },
-    { country: 'Great Britain', users: 1800, change: -5.1, flag: '🇬🇧', fill: 'hsl(var(--chart-2))' },
-    { country: 'Brazil', users: 1200, change: 25.8, flag: '🇧🇷', fill: 'hsl(var(--chart-3))' },
-    { country: 'India', users: 950, change: 12.1, flag: '🇮🇳', fill: 'hsl(var(--chart-4))' },
-    { country: 'Japan', users: 750, change: 8.3, flag: '🇯🇵', fill: 'hsl(var(--chart-5))' },
+const trafficData = [
+    { day: 'Sun', primeTime: 4000, usualTime: 2400 },
+    { day: 'Mon', primeTime: 3000, usualTime: 1398 },
+    { day: 'Tue', primeTime: 2000, usualTime: 9800 },
+    { day: 'Wed', primeTime: 2780, usualTime: 3908 },
+    { day: 'Thu', primeTime: 1890, usualTime: 4800 },
+    { day: 'Fri', primeTime: 2390, usualTime: 3800 },
+    { day: 'Sat', primeTime: 3490, usualTime: 4300 },
 ];
 
-const initialSalesData = [
-    { month: 'Jan', sales: 4000 }, { month: 'Feb', sales: 3000 }, { month: 'Mar', sales: 5000 },
-    { month: 'Apr', sales: 4500 }, { month: 'May', sales: 6000 }, { month: 'Jun', sales: 5500 },
-    { month: 'Jul', sales: 7000 }, { month: 'Aug', sales: 6500 }, { month: 'Sep', sales: 7500 },
-    { month: 'Oct', sales: 8000 }, { month: 'Nov', sales: 9000 }, { month: 'Dec', sales: 8500 },
+const ecommerceData = [
+    { name: 'Amazon', value: 35, fill: 'hsl(var(--chart-1))' },
+    { name: 'Ebay', value: 25, fill: 'hsl(var(--chart-2))' },
+    { name: 'Alibaba', value: 25, fill: 'hsl(var(--chart-3))' },
+    { name: 'Shopify', value: 16, fill: 'hsl(var(--chart-4))' },
 ];
 
-const recentTransactionsData = [
-    { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+$1,999.00', status: 'Paid' },
-    { name: 'Jackson Lee', email: 'jackson.lee@email.com', amount: '+$39.00', status: 'Paid' },
-    { name: 'Isabella Nguyen', email: 'isabella.nguyen@email.com', amount: '+$299.00', status: 'Pending' },
-    { name: 'William Kim', email: 'will@email.com', amount: '+$99.00', status: 'Paid' },
-    { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+$39.00', status: 'Paid' },
-];
-
-const initialPerformanceData = [
-    { source: 'Direct', type: 'Direct', visitors: 2048, revenue: 12482, conversion: 6.2, trend: 8.1 },
-    { source: 'Google', type: 'Organic', visitors: 8312, revenue: 62129, conversion: 7.4, trend: 12.5 },
-    { source: 'Facebook', type: 'Social', visitors: 4096, revenue: 20192, conversion: 5.1, trend: -2.3 },
-    { source: 'Referral', type: 'Referral', visitors: 1024, revenue: 5982, conversion: 4.8, trend: 3.7 },
-];
-
-
-const getInitials = (name: string) => {
-    const names = name.split(' ');
-    if (names.length > 1) {
-        return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
-    }
-    return name.substring(0, 2).toUpperCase();
+const salesPerformanceData = {
+    sinceYesterday: 18.93,
+    totalSales: 8930.79,
+    averageSales: 10120.97
 }
 
-
 export default function Home() {
-  const [keyMetrics, setKeyMetrics] = useState(initialKeyMetrics);
-  const [ageDistributionData, setAgeDistributionData] = useState(initialAgeDistributionData);
-  const [geoDistributionData, setGeoDistributionData] = useState(initialGeoDistributionData);
-  const [salesData, setSalesData] = useState(initialSalesData);
-  const [performanceData, setPerformanceData] = useState(initialPerformanceData);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // Update Key Metrics
-      setKeyMetrics(prevMetrics => prevMetrics.map(metric => {
-        const changeFactor = (Math.random() - 0.5) * 0.05; // -5% to +5% change
-        const newValue = metric.value * (1 + changeFactor);
-        const newChange = metric.change + (Math.random() - 0.5) * 2;
-        return {
-          ...metric,
-          value: newValue,
-          change: newChange,
-          changeType: newChange >= metric.change ? 'increase' : 'decrease',
-        };
-      }));
-
-      // Update Age Distribution
-      setAgeDistributionData(prevData => prevData.map(d => ({
-        ...d,
-        users: Math.max(1000, d.users + Math.floor((Math.random() - 0.5) * 300)),
-      })));
-
-      // Update Geo Distribution
-      setGeoDistributionData(prevData => {
-        const totalUsers = prevData.reduce((acc, curr) => acc + curr.users, 0);
-        return prevData.map(d => ({
-          ...d,
-          users: Math.max(200, d.users + Math.floor((Math.random() - 0.5) * 100)),
-          change: d.change + (Math.random() - 0.5) * 1.5,
-        }));
-      });
-
-      // Update Sales Data
-      setSalesData(prevData => prevData.map(d => ({
-        ...d,
-        sales: Math.max(1000, d.sales + Math.floor((Math.random() - 0.5) * 500)),
-      })))
-      
-      // Update Performance Data
-      setPerformanceData(prevData => prevData.map(d => ({
-        ...d,
-        visitors: Math.max(500, d.visitors + Math.floor((Math.random() - 0.5) * 100)),
-        revenue: Math.max(1000, d.revenue + Math.floor((Math.random() - 0.5) * 500)),
-        conversion: Math.max(1, Math.min(10, d.conversion + (Math.random() - 0.5) * 0.2)),
-        trend: d.trend + (Math.random() - 0.5) * 0.5,
-      })));
-
-    }, 3000); // Update every 3 seconds
-
-    return () => clearInterval(interval); // Cleanup on component unmount
-  }, []);
-
-
-    const ageChartConfig = {
-        users: {
-          label: "Users",
-          color: "hsl(var(--chart-1))",
-        },
+    const revenueChartConfig = {
+        totalRevenue: { label: "Total Revenue", color: "hsl(var(--chart-1))" },
+        totalTarget: { label: "Total Target", color: "hsl(var(--chart-2))" },
     };
 
-    const salesChartConfig = {
-        sales: {
-          label: "Sales",
-          color: "hsl(var(--chart-2))",
-        },
-    };
+    const trafficChartConfig = {
+        primeTime: { label: "Prime Time", color: "hsl(var(--chart-1))" },
+        usualTime: { label: "Usual Time", color: "hsl(var(--chart-2))" },
+    }
 
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-8">
+        <h1 className="text-2xl font-semibold">Dashboard</h1>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {keyMetrics.map(metric => (
             <Card key={metric.title}>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">{metric.title}</CardTitle>
-                <metric.icon className="h-4 w-4 text-muted-foreground" />
+                <div className="flex items-center gap-2">
+                    <div className="p-2 rounded-md bg-primary/10">
+                      <metric.icon className="h-5 w-5 text-primary" />
+                    </div>
+                    <CardTitle className="text-sm font-medium text-muted-foreground">{metric.title}</CardTitle>
+                </div>
+                 <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                        <DropdownMenuItem>View Details</DropdownMenuItem>
+                        <DropdownMenuItem>Download Report</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {metric.format === 'currency' ? `$${metric.value.toFixed(2)}` : `+${Math.floor(metric.value)}`}
+                  {metric.format === 'currency' ? `$${metric.value.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}` : metric.value.toLocaleString()}
                 </div>
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <span className={metric.change >= 0 ? 'text-green-600' : 'text-red-600'}>
-                        {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}%
+                    <span className={metric.changeType === 'increase' ? 'text-green-500 flex items-center' : 'text-red-500 flex items-center'}>
+                        {metric.changeType === 'increase' ? <TrendingUp className="h-3 w-3 mr-1" /> : <ArrowDown className="h-3 w-3 mr-1" />}
+                        {metric.change.toFixed(2)}%
                     </span>
-                    from last month
+                    vs last month
                 </p>
               </CardContent>
             </Card>
           ))}
         </div>
+        
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
             <Card className="lg:col-span-2">
                 <CardHeader>
-                    <CardTitle>Age Distribution</CardTitle>
-                    <CardDescription>A look at the age demographics of your user base.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                     <ChartContainer config={ageChartConfig} className="h-[300px] w-full">
-                        <LineChart
-                            accessibilityLayer
-                            data={ageDistributionData}
-                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="age" tickLine={false} axisLine={false} />
-                            <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `${Number(value) / 1000}k`} />
-                            <ChartTooltip
-                                cursor={true}
-                                content={<ChartTooltipContent indicator="dot" />}
-                            />
-                            <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={2} dot={{ r: 0 }} />
-                        </LineChart>
-                    </ChartContainer>
-                </CardContent>
-            </Card>
-            <Card>
-                <CardHeader>
-                    <CardTitle>Geographic Distribution</CardTitle>
-                    <CardDescription>Users by country.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                     <div className="h-[200px] flex items-center justify-center">
-                        <ChartContainer config={{}} className="h-full w-full">
-                            <RechartsPieChart>
-                                <Tooltip content={<ChartTooltipContent nameKey="country" hideLabel />} />
-                                <Pie data={geoDistributionData} dataKey="users" nameKey="country" cx="50%" cy="50%" outerRadius={80}>
-                                    {geoDistributionData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={entry.fill} />
-                                    ))}
-                                </Pie>
-                            </RechartsPieChart>
-                        </ChartContainer>
+                    <CardTitle>Revenue</CardTitle>
+                    <div className="ml-auto">
+                         <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" size="sm">Month</Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem>Month</DropdownMenuItem>
+                                <DropdownMenuItem>Year</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
-                    <ul className="space-y-2">
-                        {geoDistributionData.map(geo => (
-                            <li key={geo.country} className="flex items-center gap-2 text-sm">
-                               <div className="h-2 w-2 rounded-full" style={{ backgroundColor: geo.fill }} />
-                               <span className="font-medium flex-1">{geo.country}</span>
-                               <span className="text-muted-foreground">{geo.users.toLocaleString()}</span>
-                               <span className={`flex items-center gap-1 font-medium ${geo.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
-                                    {geo.change >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-                                    {Math.abs(geo.change).toFixed(1)}%
-                               </span>
-                            </li>
-                        ))}
-                    </ul>
-                </CardContent>
-            </Card>
-        </div>
-
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Sales Over Time</CardTitle>
-                    <CardDescription>A line chart showing sales performance over the last year.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <ChartContainer config={salesChartConfig} className="h-[300px] w-full">
-                         <LineChart
-                            accessibilityLayer
-                            data={salesData}
-                            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-                        >
-                            <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                            <XAxis dataKey="month" tickLine={false} axisLine={false} />
-                            <YAxis tickLine={false} axisLine={false} tickFormatter={(value) => `$${Number(value) / 1000}k`} />
-                            <ChartTooltip
-                                cursor={true}
+                     <ChartContainer config={revenueChartConfig} className="h-[250px] w-full">
+                        <LineChart accessibilityLayer data={revenueData} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
+                            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+                            <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
+                            <YAxis tickLine={false} axisLine={false} tickMargin={8} tickFormatter={(value) => `$${Number(value) / 1000}k`} />
+                            <Tooltip
+                                cursor={false}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Line type="monotone" dataKey="sales" stroke="var(--color-sales)" strokeWidth={2} dot={{ r: 0 }} />
+                            <Legend />
+                            <Line dataKey="totalRevenue" type="monotone" stroke="var(--color-totalRevenue)" strokeWidth={2} dot={false} />
+                            <Line dataKey="totalTarget" type="monotone" stroke="var(--color-totalTarget)" strokeWidth={2} dot={false} />
                         </LineChart>
                     </ChartContainer>
                 </CardContent>
             </Card>
             <Card>
                 <CardHeader>
-                    <CardTitle>Recent Transactions</CardTitle>
-                    <CardDescription>A list of the most recent transactions.</CardDescription>
+                    <CardTitle>Traffic Record</CardTitle>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                             <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem>Download Report</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </CardHeader>
-                <CardContent>
-                    <Table>
-                        <TableHeader>
-                            <TableRow>
-                                <TableHead>Customer</TableHead>
-                                <TableHead className="text-right">Amount</TableHead>
-                            </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                            {recentTransactionsData.map((transaction, index) => (
-                                <TableRow key={index}>
-                                    <TableCell>
-                                        <div className="flex items-center gap-3">
-                                            <Avatar className="h-9 w-9">
-                                                <AvatarFallback>
-                                                  {getInitials(transaction.name)}
-                                                </AvatarFallback>
-                                            </Avatar>
-                                            <div>
-                                                <p className="font-medium">{transaction.name}</p>
-                                                <p className="text-sm text-muted-foreground">{transaction.email}</p>
-                                            </div>
-                                        </div>
-                                    </TableCell>
-                                    <TableCell className="text-right font-medium">{transaction.amount}</TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
+                <CardContent className="pb-0">
+                     <ChartContainer config={trafficChartConfig} className="h-[250px] w-full">
+                        <RadarChart data={trafficData}>
+                            <PolarGrid gridType="polygon" />
+                            <PolarAngleAxis dataKey="day" />
+                            <PolarRadiusAxis angle={30} domain={[0, 10000]} tick={false} axisLine={false} />
+                            <Radar name="Prime Time" dataKey="primeTime" stroke="var(--color-primeTime)" fill="var(--color-primeTime)" fillOpacity={0.6} />
+                            <Radar name="Usual Time" dataKey="usualTime" stroke="var(--color-usualTime)" fill="var(--color-usualTime)" fillOpacity={0.6} />
+                             <Tooltip cursor={false} content={<ChartTooltipContent />} />
+                             <Legend />
+                        </RadarChart>
+                    </ChartContainer>
                 </CardContent>
             </Card>
         </div>
 
-        <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-                <div>
-                    <CardTitle>Distribution Performance</CardTitle>
-                    <CardDescription>Detailed breakdown of traffic sources.</CardDescription>
-                </div>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="gap-1">
-                            <span>Last 30 Days</span>
-                            <ChevronDown className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Last 7 Days</DropdownMenuItem>
-                        <DropdownMenuItem>Last 30 Days</DropdownMenuItem>
-                        <DropdownMenuItem>Last 90 Days</DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </CardHeader>
-            <CardContent>
-                <Table>
-                    <TableHeader>
-                        <TableRow>
-                            <TableHead>Source</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead className="text-right">Visitors</TableHead>
-                            <TableHead className="text-right">Revenue</TableHead>
-                            <TableHead className="text-right">Conversion</TableHead>
-                            <TableHead className="text-right">Trend</TableHead>
-                        </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                        {performanceData.map((data, index) => (
-                            <TableRow key={index}>
-                                <TableCell className="font-medium">{data.source}</TableCell>
-                                <TableCell>
-                                    <Badge variant="outline">{data.type}</Badge>
-                                </TableCell>
-                                <TableCell className="text-right">{data.visitors.toLocaleString()}</TableCell>
-                                <TableCell className="text-right">{`$${data.revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}</TableCell>
-                                <TableCell className="text-right">{data.conversion.toFixed(1)}%</TableCell>
-                                <TableCell className={`text-right font-medium ${data.trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>{data.trend >= 0 ? '+' : ''}{data.trend.toFixed(1)}%</TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </CardContent>
-        </Card>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+            <Card>
+                <CardHeader>
+                    <CardTitle>E-commerce Sales Platform</CardTitle>
+                     <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                             <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem>Download Report</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </CardHeader>
+                <CardContent className="flex justify-center">
+                    <ChartContainer config={{}} className="h-[250px] w-full aspect-square">
+                        <RechartsPieChart>
+                            <Tooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
+                            <Pie data={ecommerceData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={80} innerRadius={60}>
+                                {ecommerceData.map((entry) => (
+                                    <Cell key={`cell-${entry.name}`} fill={entry.fill} stroke={entry.fill} />
+                                ))}
+                            </Pie>
+                            <Legend content={({ payload }) => (
+                                <ul className="flex flex-wrap justify-center gap-x-4 gap-y-2 mt-4">
+                                {payload?.map((entry, index) => (
+                                    <li key={`item-${index}`} className="flex items-center gap-2">
+                                        <span className="h-2 w-2 rounded-full" style={{ backgroundColor: entry.color }} />
+                                        <span className="text-sm text-muted-foreground">{entry.value} ({Math.round(entry.payload.percent * 100)}%)</span>
+                                    </li>
+                                ))}
+                                </ul>
+                            )} />
+                        </RechartsPieChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Global Reach</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex flex-col items-center justify-center h-full">
+                        <img src="https://i.imgur.com/gSHeA2h.png" alt="World Map" className="h-32 object-contain" data-ai-hint="world map" />
+                        <div className="mt-4 text-center">
+                            <p className="text-sm text-muted-foreground">Campaign Reach</p>
+                            <p className="text-lg font-semibold">11 country</p>
+                        </div>
+                         <div className="mt-2 text-center">
+                            <p className="text-sm text-muted-foreground">Period</p>
+                            <p className="text-lg font-semibold">1 year</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle>Sales Performance</CardTitle>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                             <Button variant="ghost" size="icon" className="h-6 w-6"><MoreHorizontal className="h-4 w-4" /></Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem>View Details</DropdownMenuItem>
+                            <DropdownMenuItem>Download Report</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </CardHeader>
+                 <CardContent>
+                    <div className="flex flex-col items-center text-center">
+                        <div className="relative h-32 w-32">
+                             <svg className="transform -rotate-90" viewBox="0 0 120 120">
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(var(--border))" strokeWidth="12" />
+                                <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(var(--primary))" strokeWidth="12" strokeDasharray="339.292" strokeDashoffset={339.292 - (339.292 * 75) / 100} strokeLinecap="round" />
+                            </svg>
+                             <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <p className="text-xs text-muted-foreground">Since yesterday</p>
+                                <p className="text-xl font-bold flex items-center">{salesPerformanceData.sinceYesterday}% <TrendingUp className="h-4 w-4 text-green-500 ml-1" /></p>
+                            </div>
+                        </div>
+                        <div className="mt-4 flex justify-around w-full">
+                            <div className="text-center">
+                                <p className="text-sm text-muted-foreground">Total sales per day</p>
+                                <p className="font-semibold">${salesPerformanceData.totalSales.toLocaleString()}</p>
+                            </div>
+                            <div className="text-center">
+                                <p className="text-sm text-muted-foreground">Average sales</p>
+                                <p className="font-semibold">${salesPerformanceData.averageSales.toLocaleString()}</p>
+                            </div>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
       </div>
     </DashboardLayout>
   );
 }
-
-    
