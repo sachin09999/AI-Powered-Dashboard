@@ -7,20 +7,20 @@ import { Users, DollarSign, Activity, TrendingUp, MoreHorizontal, ArrowUpRight, 
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { LineChart, Line, BarChart, Bar, CartesianGrid, XAxis, YAxis, ResponsiveContainer, PieChart as RechartsPieChart, Pie, Cell, Legend, Tooltip } from 'recharts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 
-const keyMetrics = [
-  { title: 'Total Revenue', value: '$45,231.89', change: '+20.1%', changeType: 'increase', icon: DollarSign },
-  { title: 'Subscriptions', value: '+2350', change: '+180.1%', changeType: 'increase', icon: Users },
-  { title: 'Sales', value: '+12,234', change: '+19%', changeType: 'increase', icon: Activity },
-  { title: 'Active Now', value: '+573', change: '+201', changeType: 'increase', icon: TrendingUp },
+const initialKeyMetrics = [
+  { title: 'Total Revenue', value: 45231.89, change: 20.1, changeType: 'increase', icon: DollarSign, format: 'currency' },
+  { title: 'Subscriptions', value: 2350, change: 180.1, changeType: 'increase', icon: Users, format: 'number' },
+  { title: 'Sales', value: 12234, change: 19, changeType: 'increase', icon: Activity, format: 'number' },
+  { title: 'Active Now', value: 573, change: 201, changeType: 'increase', icon: TrendingUp, format: 'number' },
 ];
 
-const ageDistributionData = [
+const initialAgeDistributionData = [
     { month: 'Jan', age: '18-24', users: 3800 },
     { month: 'Feb', age: '25-34', users: 5200 },
     { month: 'Mar', age: '35-44', users: 4500 },
@@ -29,42 +29,20 @@ const ageDistributionData = [
     { month: 'Jun', age: '65+', users: 4800 },
 ];
 
-const ageChartConfig = {
-    users: {
-      label: "Users",
-      color: "hsl(var(--chart-1))",
-    },
-};
-
-const geoDistributionData = [
-    { country: 'United States', users: 2500, change: '+15.2%', flag: '🇺🇸', fill: 'hsl(var(--chart-1))' },
-    { country: 'Great Britain', users: 1800, change: '-5.1%', flag: '🇬🇧', fill: 'hsl(var(--chart-2))' },
-    { country: 'Brazil', users: 1200, change: '+25.8%', flag: '🇧🇷', fill: 'hsl(var(--chart-3))' },
-    { country: 'India', users: 950, change: '+12.1%', flag: '🇮🇳', fill: 'hsl(var(--chart-4))' },
-    { country: 'Japan', users: 750, change: '+8.3%', flag: '🇯🇵', fill: 'hsl(var(--chart-5))' },
+const initialGeoDistributionData = [
+    { country: 'United States', users: 2500, change: 15.2, flag: '🇺🇸', fill: 'hsl(var(--chart-1))' },
+    { country: 'Great Britain', users: 1800, change: -5.1, flag: '🇬🇧', fill: 'hsl(var(--chart-2))' },
+    { country: 'Brazil', users: 1200, change: 25.8, flag: '🇧🇷', fill: 'hsl(var(--chart-3))' },
+    { country: 'India', users: 950, change: 12.1, flag: '🇮🇳', fill: 'hsl(var(--chart-4))' },
+    { country: 'Japan', users: 750, change: 8.3, flag: '🇯🇵', fill: 'hsl(var(--chart-5))' },
 ];
 
-const salesData = [
-    { month: 'Jan', sales: 4000 },
-    { month: 'Feb', sales: 3000 },
-    { month: 'Mar', sales: 5000 },
-    { month: 'Apr', sales: 4500 },
-    { month: 'May', sales: 6000 },
-    { month: 'Jun', sales: 5500 },
-    { month: 'Jul', sales: 7000 },
-    { month: 'Aug', sales: 6500 },
-    { month: 'Sep', sales: 7500 },
-    { month: 'Oct', sales: 8000 },
-    { month: 'Nov', sales: 9000 },
-    { month: 'Dec', sales: 8500 },
+const initialSalesData = [
+    { month: 'Jan', sales: 4000 }, { month: 'Feb', sales: 3000 }, { month: 'Mar', sales: 5000 },
+    { month: 'Apr', sales: 4500 }, { month: 'May', sales: 6000 }, { month: 'Jun', sales: 5500 },
+    { month: 'Jul', sales: 7000 }, { month: 'Aug', sales: 6500 }, { month: 'Sep', sales: 7500 },
+    { month: 'Oct', sales: 8000 }, { month: 'Nov', sales: 9000 }, { month: 'Dec', sales: 8500 },
 ];
-
-const salesChartConfig = {
-    sales: {
-      label: "Sales",
-      color: "hsl(var(--chart-2))",
-    },
-};
 
 const recentTransactionsData = [
     { name: 'Olivia Martin', email: 'olivia.martin@email.com', amount: '+$1,999.00', status: 'Paid' },
@@ -74,12 +52,13 @@ const recentTransactionsData = [
     { name: 'Sofia Davis', email: 'sofia.davis@email.com', amount: '+$39.00', status: 'Paid' },
 ];
 
-const performanceData = [
-    { source: 'Direct', type: 'Direct', visitors: 2048, revenue: '$12,482', conversion: '6.2%', trend: '+8.1%' },
-    { source: 'Google', type: 'Organic', visitors: 8312, revenue: '$62,129', conversion: '7.4%', trend: '+12.5%' },
-    { source: 'Facebook', type: 'Social', visitors: 4096, revenue: '$20,192', conversion: '5.1%', trend: '-2.3%' },
-    { source: 'Referral', type: 'Referral', visitors: 1024, revenue: '$5,982', conversion: '4.8%', trend: '+3.7%' },
+const initialPerformanceData = [
+    { source: 'Direct', type: 'Direct', visitors: 2048, revenue: 12482, conversion: 6.2, trend: 8.1 },
+    { source: 'Google', type: 'Organic', visitors: 8312, revenue: 62129, conversion: 7.4, trend: 12.5 },
+    { source: 'Facebook', type: 'Social', visitors: 4096, revenue: 20192, conversion: 5.1, trend: -2.3 },
+    { source: 'Referral', type: 'Referral', visitors: 1024, revenue: 5982, conversion: 4.8, trend: 3.7 },
 ];
+
 
 const getInitials = (name: string) => {
     const names = name.split(' ');
@@ -91,6 +70,78 @@ const getInitials = (name: string) => {
 
 
 export default function Home() {
+  const [keyMetrics, setKeyMetrics] = useState(initialKeyMetrics);
+  const [ageDistributionData, setAgeDistributionData] = useState(initialAgeDistributionData);
+  const [geoDistributionData, setGeoDistributionData] = useState(initialGeoDistributionData);
+  const [salesData, setSalesData] = useState(initialSalesData);
+  const [performanceData, setPerformanceData] = useState(initialPerformanceData);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Update Key Metrics
+      setKeyMetrics(prevMetrics => prevMetrics.map(metric => {
+        const changeFactor = (Math.random() - 0.5) * 0.05; // -5% to +5% change
+        const newValue = metric.value * (1 + changeFactor);
+        const newChange = metric.change + (Math.random() - 0.5) * 2;
+        return {
+          ...metric,
+          value: newValue,
+          change: newChange,
+          changeType: newChange >= metric.change ? 'increase' : 'decrease',
+        };
+      }));
+
+      // Update Age Distribution
+      setAgeDistributionData(prevData => prevData.map(d => ({
+        ...d,
+        users: Math.max(1000, d.users + Math.floor((Math.random() - 0.5) * 300)),
+      })));
+
+      // Update Geo Distribution
+      setGeoDistributionData(prevData => {
+        const totalUsers = prevData.reduce((acc, curr) => acc + curr.users, 0);
+        return prevData.map(d => ({
+          ...d,
+          users: Math.max(200, d.users + Math.floor((Math.random() - 0.5) * 100)),
+          change: d.change + (Math.random() - 0.5) * 1.5,
+        }));
+      });
+
+      // Update Sales Data
+      setSalesData(prevData => prevData.map(d => ({
+        ...d,
+        sales: Math.max(1000, d.sales + Math.floor((Math.random() - 0.5) * 500)),
+      })))
+      
+      // Update Performance Data
+      setPerformanceData(prevData => prevData.map(d => ({
+        ...d,
+        visitors: Math.max(500, d.visitors + Math.floor((Math.random() - 0.5) * 100)),
+        revenue: Math.max(1000, d.revenue + Math.floor((Math.random() - 0.5) * 500)),
+        conversion: Math.max(1, Math.min(10, d.conversion + (Math.random() - 0.5) * 0.2)),
+        trend: d.trend + (Math.random() - 0.5) * 0.5,
+      })));
+
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval); // Cleanup on component unmount
+  }, []);
+
+
+    const ageChartConfig = {
+        users: {
+          label: "Users",
+          color: "hsl(var(--chart-1))",
+        },
+    };
+
+    const salesChartConfig = {
+        sales: {
+          label: "Sales",
+          color: "hsl(var(--chart-2))",
+        },
+    };
+
   return (
     <DashboardLayout>
       <div className="flex flex-col gap-8">
@@ -102,10 +153,12 @@ export default function Home() {
                 <metric.icon className="h-4 w-4 text-muted-foreground" />
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold">{metric.value}</div>
+                <div className="text-2xl font-bold">
+                  {metric.format === 'currency' ? `$${metric.value.toFixed(2)}` : `+${Math.floor(metric.value)}`}
+                </div>
                 <p className="text-xs text-muted-foreground flex items-center gap-1">
-                    <span className={metric.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}>
-                        {metric.change}
+                    <span className={metric.change >= 0 ? 'text-green-600' : 'text-red-600'}>
+                        {metric.change >= 0 ? '+' : ''}{metric.change.toFixed(1)}%
                     </span>
                     from last month
                 </p>
@@ -133,7 +186,7 @@ export default function Home() {
                                 cursor={true}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="users" stroke="var(--color-users)" strokeWidth={2} dot={{ r: 0 }} />
                         </LineChart>
                     </ChartContainer>
                 </CardContent>
@@ -162,9 +215,9 @@ export default function Home() {
                                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: geo.fill }} />
                                <span className="font-medium flex-1">{geo.country}</span>
                                <span className="text-muted-foreground">{geo.users.toLocaleString()}</span>
-                               <span className={`flex items-center gap-1 font-medium ${geo.change.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>
-                                    {geo.change.startsWith('+') ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
-                                    {geo.change.substring(1)}
+                               <span className={`flex items-center gap-1 font-medium ${geo.change >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                                    {geo.change >= 0 ? <ArrowUpRight className="h-3 w-3" /> : <ArrowDownRight className="h-3 w-3" />}
+                                    {Math.abs(geo.change).toFixed(1)}%
                                </span>
                             </li>
                         ))}
@@ -193,7 +246,7 @@ export default function Home() {
                                 cursor={true}
                                 content={<ChartTooltipContent indicator="dot" />}
                             />
-                            <Line type="monotone" dataKey="sales" stroke="var(--color-sales)" strokeWidth={2} dot={false} />
+                            <Line type="monotone" dataKey="sales" stroke="var(--color-sales)" strokeWidth={2} dot={{ r: 0 }} />
                         </LineChart>
                     </ChartContainer>
                 </CardContent>
@@ -276,9 +329,9 @@ export default function Home() {
                                     <Badge variant="outline">{data.type}</Badge>
                                 </TableCell>
                                 <TableCell className="text-right">{data.visitors.toLocaleString()}</TableCell>
-                                <TableCell className="text-right">{data.revenue}</TableCell>
-                                <TableCell className="text-right">{data.conversion}</TableCell>
-                                <TableCell className={`text-right font-medium ${data.trend.startsWith('+') ? 'text-green-600' : 'text-red-600'}`}>{data.trend}</TableCell>
+                                <TableCell className="text-right">{`$${data.revenue.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}</TableCell>
+                                <TableCell className="text-right">{data.conversion.toFixed(1)}%</TableCell>
+                                <TableCell className={`text-right font-medium ${data.trend >= 0 ? 'text-green-600' : 'text-red-600'}`}>{data.trend >= 0 ? '+' : ''}{data.trend.toFixed(1)}%</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
@@ -289,3 +342,5 @@ export default function Home() {
     </DashboardLayout>
   );
 }
+
+    
