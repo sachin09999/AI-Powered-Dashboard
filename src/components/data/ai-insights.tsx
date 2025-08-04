@@ -148,7 +148,7 @@ export function AiInsights() {
                                 <div key={message.id} className={`flex items-start gap-4 ${message.type === 'user' ? 'justify-end' : ''}`}>
                                     {message.type === 'ai' && (
                                         <Avatar className="h-9 w-9 border" data-ai-hint="abstract tech">
-                                            <AvatarImage src="https://placehold.co/100x100" />
+                                            <AvatarImage src="https://placehold.co/100x100.png" />
                                             <AvatarFallback>AI</AvatarFallback>
                                         </Avatar>
                                     )}
@@ -160,7 +160,7 @@ export function AiInsights() {
                             {isLoading && (
                                 <div className="flex items-start gap-4">
                                     <Avatar className="h-9 w-9 border" data-ai-hint="abstract tech">
-                                        <AvatarImage src="https://placehold.co/100x100" />
+                                        <AvatarImage src="https://placehold.co/100x100.png" />
                                         <AvatarFallback>AI</AvatarFallback>
                                     </Avatar>
                                     <div className="max-w-[85%] rounded-lg p-3 bg-muted shadow-sm flex items-center">

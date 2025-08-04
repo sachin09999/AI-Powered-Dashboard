@@ -101,7 +101,7 @@ export function AiChatWidget() {
                                     <div key={message.id} className={`flex items-start gap-3 ${message.type === 'user' ? 'justify-end' : ''}`}>
                                         {message.type === 'ai' && (
                                             <Avatar className="h-8 w-8 border" data-ai-hint="abstract tech">
-                                                <AvatarImage src="https://placehold.co/100x100" />
+                                                <AvatarImage src="https://placehold.co/100x100.png" />
                                                 <AvatarFallback>AI</AvatarFallback>
                                             </Avatar>
                                         )}
@@ -113,7 +113,7 @@ export function AiChatWidget() {
                                 {isLoading && (
                                     <div className="flex items-start gap-3">
                                         <Avatar className="h-8 w-8 border" data-ai-hint="abstract tech">
-                                            <AvatarImage src="https://placehold.co/100x100" />
+                                            <AvatarImage src="https://placehold.co/100x100.png" />
                                             <AvatarFallback>AI</AvatarFallback>
                                         </Avatar>
                                         <div className="max-w-[85%] rounded-lg px-3 py-2 bg-muted shadow-sm flex items-center">
