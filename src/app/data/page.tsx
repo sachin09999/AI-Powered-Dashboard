@@ -1,3 +1,4 @@
+'use client';
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { DataUpload } from '@/components/data/data-upload';
 import { AiInsights } from '@/components/data/ai-insights';

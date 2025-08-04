@@ -4,9 +4,9 @@ import { DashboardLayout } from '@/components/layout/dashboard-layout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart, CartesianGrid, Line, LineChart, Pie, PieChart as RechartsPieChart, ResponsiveContainer, XAxis, YAxis, Legend, Tooltip, Cell } from 'recharts';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-const lineChartData = [
+const initialLineChartData = [
   { month: "January", desktop: 186, mobile: 80 },
   { month: "February", desktop: 305, mobile: 200 },
   { month: "March", desktop: 237, mobile: 120 },
@@ -15,7 +15,7 @@ const lineChartData = [
   { month: "June", desktop: 214, mobile: 140 },
 ];
 
-const barChartData = [
+const initialBarChartData = [
   { name: 'USA', value: 400 },
   { name: 'Canada', value: 300 },
   { name: 'Mexico', value: 200 },
@@ -23,7 +23,7 @@ const barChartData = [
   { name: 'Germany', value: 189 },
 ];
 
-const pieChartData = [
+const initialPieChartData = [
     { name: 'Desktop', value: 45, fill: 'hsl(var(--chart-1))' },
     { name: 'Mobile', value: 35, fill: 'hsl(var(--chart-2))' },
     { name: 'Tablet', value: 15, fill: 'hsl(var(--chart-3))' },
@@ -40,6 +40,38 @@ const barChartConfig = {
 };
 
 export default function ChartsPage() {
+    const [lineData, setLineData] = useState(initialLineChartData);
+    const [barData, setBarData] = useState(initialBarChartData);
+    const [pieData, setPieData] = useState(initialPieChartData);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setLineData(prevData =>
+                prevData.map(item => ({
+                    ...item,
+                    desktop: Math.max(50, item.desktop + Math.floor(Math.random() * 20) - 10),
+                    mobile: Math.max(30, item.mobile + Math.floor(Math.random() * 20) - 10),
+                }))
+            );
+            setBarData(prevData =>
+                prevData.map(item => ({
+                    ...item,
+                    value: Math.max(100, item.value + Math.floor(Math.random() * 50) - 25),
+                })).sort((a, b) => b.value - a.value)
+            );
+            setPieData(prevData => {
+                const newTotal = prevData.reduce((acc, item) => acc + item.value, 0);
+                const adjustments = prevData.map(() => Math.random() * 2 - 1);
+                return prevData.map((item, index) => ({
+                    ...item,
+                    value: Math.max(5, item.value + adjustments[index] * (newTotal / 100))
+                }));
+            });
+        }, 3000);
+
+        return () => clearInterval(interval);
+    }, []);
+
   return (
     <DashboardLayout>
       <div className="grid gap-6">
@@ -52,7 +84,7 @@ export default function ChartsPage() {
             <ChartContainer config={lineChartConfig} className="h-[350px] w-full">
               <LineChart
                 accessibilityLayer
-                data={lineChartData}
+                data={lineData}
                 margin={{ left: 12, right: 12 }}
               >
                 <CartesianGrid vertical={false} />
@@ -66,6 +98,7 @@ export default function ChartsPage() {
                   tickLine={false}
                   axisLine={false}
                   tickMargin={8}
+                  tickFormatter={(value) => `${value}`}
                 />
                 <ChartTooltip
                   cursor={false}
@@ -99,7 +132,7 @@ export default function ChartsPage() {
                 </CardHeader>
                 <CardContent>
                     <ChartContainer config={barChartConfig} className="h-[300px] w-full">
-                        <BarChart accessibilityLayer data={barChartData} layout="vertical">
+                        <BarChart accessibilityLayer data={barData} layout="vertical">
                             <CartesianGrid horizontal={false} />
                             <YAxis
                                 dataKey="name"
@@ -126,7 +159,7 @@ export default function ChartsPage() {
                         <RechartsPieChart>
                             <Tooltip content={<ChartTooltipContent nameKey="name" hideLabel />} />
                             <Pie
-                                data={pieChartData}
+                                data={pieData}
                                 dataKey="value"
                                 nameKey="name"
                                 cx="50%"
@@ -145,7 +178,7 @@ export default function ChartsPage() {
                                     );
                                 }}
                             >
-                                {pieChartData.map((entry, index) => (
+                                {pieData.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={entry.fill} />
                                 ))}
                             </Pie>
