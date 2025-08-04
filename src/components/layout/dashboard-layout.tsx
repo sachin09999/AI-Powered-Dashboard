@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { 
     LayoutGrid, Home, Box, ShoppingCart, MessageSquare, Mail, BarChart3, GitBranch, Tv,
-    User, Users, Settings, LogOut, Search, Share, Upload, SlidersHorizontal, PanelLeft, Copy, Check
+    User, Users, Settings, LogOut, Search, Share, Upload, SlidersHorizontal, PanelLeft, Copy, Check, Sun, Moon
 } from 'lucide-react';
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarTrigger, SidebarFooter, SidebarGroup, SidebarGroupLabel } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
@@ -21,6 +21,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { useTheme } from '@/components/theme-provider';
 
 const navGroups = [
     {
@@ -154,6 +155,17 @@ function CustomizeWidgetsDialog({ widgets, setWidgets }: { widgets: any, setWidg
     )
 }
 
+function ThemeToggle() {
+    const { theme, toggleTheme } = useTheme();
+
+    return (
+        <Button variant="ghost" size="icon" onClick={toggleTheme}>
+            {theme === 'dark' ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <span className="sr-only">Toggle theme</span>
+        </Button>
+    )
+}
+
 export function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { toast } = useToast();
@@ -258,6 +270,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex items-center gap-2">
             <Notifications />
+            <ThemeToggle />
             <CustomizeWidgetsDialog widgets={widgets} setWidgets={setWidgets} />
             <ShareDialog />
             <Button variant="primary" size="sm" className="gap-1.5" onClick={exportData}><Upload className="h-4 w-4" /> Export</Button>
