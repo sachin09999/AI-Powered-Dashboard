@@ -79,11 +79,10 @@ export function AiChatWidget() {
         <Popover open={isOpen} onOpenChange={setIsOpen}>
             <PopoverTrigger asChild>
                 <Button
-                    variant="primary"
                     size="icon"
-                    className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50"
+                    className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg z-50 bg-gradient-to-br from-primary to-primary/70 text-primary-foreground animate-pulse-glow transition-transform hover:scale-110"
                 >
-                   {isOpen ? <X className="h-6 w-6" /> : <MessageSquare className="h-6 w-6" />}
+                   {isOpen ? <X className="h-6 w-6" /> : <Sparkles className="h-6 w-6" />}
                 </Button>
             </PopoverTrigger>
             <PopoverContent side="top" align="end" className="w-80 md:w-96 p-0 border-none shadow-xl rounded-lg mr-2 mb-2">
