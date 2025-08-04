@@ -148,7 +148,7 @@ export default function Home({ widgets = { totalIncome: true, totalProfit: true,
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
           {keyMetrics.filter(metric => widgets[metric.id]).map(metric => (
             <Card key={metric.title}>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardHeader>
                 <div className="flex items-center gap-2">
                     <div className="p-2 rounded-md bg-primary/10">
                       <metric.icon className="h-5 w-5 text-primary" />
