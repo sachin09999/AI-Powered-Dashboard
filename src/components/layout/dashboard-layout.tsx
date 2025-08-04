@@ -1,3 +1,4 @@
+
 'use client';
 
 import Link from 'next/link';
@@ -53,9 +54,7 @@ function UserNav() {
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" className="relative h-9 w-9 rounded-full">
           <Avatar className="h-9 w-9">
-            <AvatarFallback>
-              <User className="h-5 w-5" />
-            </AvatarFallback>
+            <AvatarFallback>JD</AvatarFallback>
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
@@ -169,7 +168,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem>
                     <div className="flex items-start gap-3 p-2">
                         <Avatar className="h-8 w-8 border" data-ai-hint="abstract tech">
-                            <AvatarImage src="https://placehold.co/100x100" alt="Avatar" />
+                            
                             <AvatarFallback>AI</AvatarFallback>
                         </Avatar>
                         <div className="grid gap-1">
@@ -181,7 +180,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                  <DropdownMenuItem>
                     <div className="flex items-start gap-3 p-2">
                         <Avatar className="h-8 w-8 border" data-ai-hint="server database">
-                            <AvatarImage src="https://placehold.co/100x100" alt="Avatar" />
+                            
                             <AvatarFallback>DS</AvatarFallback>
                         </Avatar>
                         <div className="grid gap-1">
@@ -193,7 +192,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <DropdownMenuItem>
                     <div className="flex items-start gap-3 p-2">
                         <Avatar className="h-8 w-8 border" data-ai-hint="gears cogs">
-                            <AvatarImage src="https://placehold.co/100x100" alt="Avatar" />
+                            
                             <AvatarFallback>SYS</AvatarFallback>
                         </Avatar>
                         <div className="grid gap-1">

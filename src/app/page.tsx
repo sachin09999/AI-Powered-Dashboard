@@ -1,3 +1,4 @@
+
 'use client';
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
@@ -79,6 +80,15 @@ const performanceData = [
     { source: 'Facebook', type: 'Social', visitors: 4096, revenue: '$20,192', conversion: '5.1%', trend: '-2.3%' },
     { source: 'Referral', type: 'Referral', visitors: 1024, revenue: '$5,982', conversion: '4.8%', trend: '+3.7%' },
 ];
+
+const getInitials = (name: string) => {
+    const names = name.split(' ');
+    if (names.length > 1) {
+        return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
+    }
+    return name.substring(0, 2).toUpperCase();
+}
+
 
 export default function Home() {
   return (
@@ -208,7 +218,7 @@ export default function Home() {
                                         <div className="flex items-center gap-3">
                                             <Avatar className="h-9 w-9">
                                                 <AvatarFallback>
-                                                  <User className="h-5 w-5" />
+                                                  {getInitials(transaction.name)}
                                                 </AvatarFallback>
                                             </Avatar>
                                             <div>

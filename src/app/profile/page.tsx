@@ -1,3 +1,4 @@
+
 'use client';
 
 import { DashboardLayout } from '@/components/layout/dashboard-layout';
@@ -20,9 +21,7 @@ export default function ProfilePage() {
           <CardContent className="space-y-6">
             <div className="flex items-center gap-6">
               <Avatar className="h-20 w-20 border">
-                <AvatarFallback>
-                  <User className="h-10 w-10" />
-                </AvatarFallback>
+                <AvatarFallback className="text-2xl">JD</AvatarFallback>
               </Avatar>
               <div className="grid gap-2">
                 <Button>Change Photo</Button>
